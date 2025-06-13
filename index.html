@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News Confidence Task</title>
+
+  <style>
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --input-bg: #1a1a1a;
+      --border-color:#444;
+    }
+    *      { box-sizing:border-box; }
+    html,body{
+      margin:0;
+      font-family:system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--fg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      text-align:center;
+    }
+    #stage{
+      width:92%;
+      max-width:860px;
+      padding:2rem;
+    }
+    button,
+    input[type=text],
+    input[type=number],
+    select {
+      font-size:1rem;
+      padding:.5rem 1rem;
+      margin:.3rem;
+      background:var(--input-bg);
+      color:var(--fg);
+      border:1px solid var(--border-color);
+    }
+    button{
+      cursor:pointer;
+      background:#222;
+    }
+    button:hover{
+      background:#333;
+      border-color:#555;
+    }
+    .fixation-cross-container{
+      font-size:3rem;
+      height:6em;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .statement-container, .feedback-container, .questionnaire-container {
+      min-height:12em;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding: 1em;
+    }
+    .stimulus-image {
+      max-width: 420px;
+      max-height: 360px;
+      width: auto;
+      height: auto;
+      display: block;
+      margin: 0 auto 1em auto;
+      border: 2px solid #333;
+      background: #111;
+      box-shadow: 0 2px 8px #000a;
+    }
+    .feedback-text { font-size:1.2rem; }
+    .instructions { font-size:1rem; color: #ccc; margin-top: 1em;}
+    .question-text { font-size:1.2rem; margin-bottom: 1em;}
+    .loading { font-size:1.2rem; color: #aaa; }
+  </style>
+</head>
+<body>
+  <div id="stage">Loading experiment...</div>
+
+<script>
+const CONFIG = {
+  experimentName         : 'News Confidence Task',
+  csvFile                : 'statements_master.csv', // Now expects image_filename field
+  responseKeys           : { true_key: 'f', false_key: 'j' }, // F = True, J = False
+  dataPipeID             : 'qWHxwr6D720q',
+  fallbackDownload       : true,
+  fixationCrossDuration  : 500,
+  statementTimeoutDuration: 10000,
+  feedbackDuration       : 1000,
+  timeoutFeedbackDuration: 2000,
+  isiDuration            : 500,
+  feedbackManipulationPercentages: {
+    High   : 0.80,
+    Medium : 0.50,
+    Low    : 0.20,
+    Control: null
+  },
+  numInductionTrials: 40,
+  numTestTrials: 20,
+  masterHeader : [
+    'pid', 'group', 'block_type', 'trial_number_in_block', 'trial_number_overall',
+    'statement_id', 'statement_text', 'statement_truth_value', 'image_filename',
+    'response', 'is_correct', 'rt_ms',
+    'feedback_manipulation_type', 'feedback_shown_fact_check_for',
+    'q_own_ability_pre', 'q_others_ability_pre', 'q_rank_pre',
+    'q_own_ability_post', 'q_others_ability_post', 'q_rank_post',
+    'timestamp'
+  ]
+};
+
+const state = {
+  participant : '',
+  group       : '',
+  stimuliPool : [],
+  inductionStatements: [],
+  testStatements: [],
+  data        : [],
+  trialCountOverall: 0,
+  q_own_ability_pre: null,
+  q_others_ability_pre: null,
+  q_rank_pre: null,
+  q_own_ability_post: null,
+  q_others_ability_post: null,
+  q_rank_post: null,
+};
+
+const stage = document.getElementById('stage');
+let rtClock = 0;
+
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const shuffle = arr=>{
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  } return arr;
+};
+const show = html => stage.innerHTML = html;
+
+function log(dataRow) {
+  dataRow.timestamp = new Date().toISOString();
+  const completeRow = {};
+  for (const header of CONFIG.masterHeader) {
+    completeRow[header] = (header in dataRow) ? dataRow[header] : '';
+  }
+  state.data.push(completeRow);
+}
+function toCSV(rows){
+  if (!rows.length) return '';
+  const header = CONFIG.masterHeader;
+  const lines  = [header.join(',')];
+  rows.forEach(r=>{
+    const line = header.map(k=>{
+      let cell = (k in r && r[k]!==null && r[k]!==undefined) ? r[k] : '';
+      cell = String(cell);
+      if (/[",\n\r]/.test(cell))
+        cell = '"' + cell.replace(/"/g,'""') + '"';
+      return cell;
+    }).join(',');
+    lines.push(line);
+  });
+  return lines.join('\n');
+}
+function uploadCSV(filename,csv){
+  return fetch('https://pipe.jspsych.org/api/data',{
+    method :'POST',
+    headers:{'Content-Type':'application/json'},
+    body   : JSON.stringify({
+      experimentID: CONFIG.dataPipeID,
+      filename    : filename,
+      data        : csv
+    })
+  });
+}
+function downloadCSV(csv,fn){
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url =URL.createObjectURL(blob);
+  const a   =document.createElement('a');
+  a.href=url; a.download=fn; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// --- CSV Loader ---
+async function loadCSVStimuli(){
+  const response = await fetch(CONFIG.csvFile);
+  if (!response.ok) throw new Error(`Failed to load ${CONFIG.csvFile}: ${response.statusText}`);
+  const txt = await response.text();
+  // Try to detect delimiter: tab or comma
+  let lines = txt.trim().split(/\r?\n/);
+  let delimiter = "\t";
+  if (lines[0].split("\t").length < 6) delimiter = ","; // fallback to comma if tabs are missing
+  const header = lines.shift().split(delimiter);
+  lines.forEach(line => {
+    // Handle quoted delimiters and padding
+    let fields = [];
+    if (delimiter === "\t") {
+      fields = line.split("\t");
+    } else {
+      // Handle CSV quoting (very basic, assumes no embedded newlines)
+      let current = '', inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === delimiter && !inQuotes) {
+          fields.push(current);
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      fields.push(current);
+    }
+    while(fields.length < 6) fields.push('');
+    state.stimuliPool.push({
+      id: fields[0],
+      text: fields[1],
+      is_true: fields[2].toUpperCase() === 'TRUE',
+      fact_check_true: fields[3],
+      fact_check_false: fields[4],
+      image_filename: fields[5]
+    });
+  });
+  if(state.stimuliPool.length < CONFIG.numInductionTrials + CONFIG.numTestTrials) {
+    throw new Error(`Insufficient stimuli loaded. Need ${CONFIG.numInductionTrials + CONFIG.numTestTrials}, found ${state.stimuliPool.length}. Check ${CONFIG.csvFile}.`);
+  }
+  shuffle(state.stimuliPool);
+  state.inductionStatements = state.stimuliPool.slice(0, CONFIG.numInductionTrials);
+  state.testStatements = state.stimuliPool.slice(CONFIG.numInductionTrials, CONFIG.numInductionTrials + CONFIG.numTestTrials);
+}
+
+// --- Key helpers ---
+function waitKeys(validKeys) {
+  return new Promise(resolve => {
+    function onKey(e) {
+      const key = e.key.toLowerCase();
+      if (validKeys.includes(key)) {
+        document.removeEventListener('keydown', onKey);
+        resolve(key);
+      }
+    }
+    document.addEventListener('keydown', onKey);
+  });
+}
+function waitKeysOrTimeout(validKeys, timeoutMs) {
+  return new Promise(resolve => {
+    let timeoutId = null;
+    function onKey(e) {
+      const key = e.key.toLowerCase();
+      if (validKeys.includes(key)) {
+        clearTimeout(timeoutId);
+        document.removeEventListener('keydown', onKey);
+        resolve({ key: key, timedOut: false });
+      }
+    }
+    document.addEventListener('keydown', onKey);
+    timeoutId = setTimeout(() => {
+      document.removeEventListener('keydown', onKey);
+      resolve({ key: null, timedOut: true });
+    }, timeoutMs);
+  });
+}
+
+// --- INTRO ---
+async function introScreen(){
+  show(`
+    <h1>${CONFIG.experimentName}</h1>
+    <p>Please enter your Prolific ID and select your group.</p>
+    <input id="pid" placeholder="Prolific ID" /><br>
+    <select id="groupSelect">
+      <option value="">--Select Group--</option>
+      <option value="High">High Confidence Group</option>
+      <option value="Medium">Medium Confidence Group</option>
+      <option value="Low">Low Confidence Group</option>
+      <option value="Control">Control Group</option>
+    </select><br>
+    <button id="startBtn">Start</button>
+  `);
+
+  document.getElementById('startBtn').onclick = () => {
+    state.participant = document.getElementById('pid').value.trim();
+    state.group = document.getElementById('groupSelect').value;
+    if (!state.participant) {
+      alert('Please enter a Prolific ID.');
+      return;
+    }
+    if (!state.group) {
+      alert('Please select a group.');
+      return;
+    }
+    runBlock1();
+  };
+}
+
+// --- TRIAL LOGIC ---
+async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
+  state.trialCountOverall++;
+  // 1. Fixation
+  show(`<div class="fixation-cross-container">+</div>`);
+  await sleep(CONFIG.fixationCrossDuration);
+
+  // 2. Show image stimulus
+  show(`
+    <div class="statement-container">
+      <img class="stimulus-image" src="images/${stimulus.image_filename}" alt="headline stimulus" onerror="this.onerror=null;this.style.display='none';document.getElementById('imgerror').style.display='block';">
+      <div id="imgerror" class="loading" style="display:none;">[Image not found: ${stimulus.image_filename}]</div>
+      <p class="instructions">(F = TRUE / J = FALSE)</p>
+    </div>
+  `);
+
+  rtClock = performance.now();
+  const responseResult = await waitKeysOrTimeout(
+    [CONFIG.responseKeys.true_key, CONFIG.responseKeys.false_key],
+    CONFIG.statementTimeoutDuration
+  );
+  const rt = performance.now() - rtClock;
+
+  let participantResponse = null;
+  let isCorrect = null;
+  let feedbackText = '';
+  let feedbackManipulationType = '';
+  let feedbackShownFactCheckFor = null;
+
+  if (responseResult.timedOut) {
+    participantResponse = 'TIMEOUT';
+    isCorrect = null;
+    feedbackText = "Please respond faster on the next trial.";
+    feedbackManipulationType = 'TIMEOUT';
+    show(`<div class="feedback-container"><p class="feedback-text">${feedbackText}</p></div>`);
+    await sleep(CONFIG.timeoutFeedbackDuration);
+  } else {
+    participantResponse = responseResult.key === CONFIG.responseKeys.true_key ? 'True' : 'False';
+    isCorrect = (participantResponse === 'True') === stimulus.is_true;
+    if (blockType === 'ConfidenceInduction' && state.group !== 'Control') {
+      const affirmThreshold = CONFIG.feedbackManipulationPercentages[state.group];
+      const shouldAffirm = Math.random() < affirmThreshold;
+      if (shouldAffirm) {
+        feedbackManipulationType = 'Affirm';
+        feedbackShownFactCheckFor = (participantResponse === 'True');
+      } else {
+        feedbackManipulationType = 'Refute';
+        feedbackShownFactCheckFor = !(participantResponse === 'True');
+      }
+    } else {
+      feedbackManipulationType = 'Veridical';
+      feedbackShownFactCheckFor = stimulus.is_true;
+    }
+    feedbackText = feedbackShownFactCheckFor ? stimulus.fact_check_true : stimulus.fact_check_false;
+    show(`<div class="feedback-container"><p class="feedback-text">${feedbackText}</p></div>`);
+    await sleep(CONFIG.feedbackDuration);
+  }
+
+  const trialData = {
+    pid: state.participant,
+    group: state.group,
+    block_type: blockType,
+    trial_number_in_block: trialNumInBlock,
+    trial_number_overall: state.trialCountOverall,
+    statement_id: stimulus.id,
+    statement_text: stimulus.text,
+    statement_truth_value: stimulus.is_true ? 'TRUE' : 'FALSE',
+    image_filename: stimulus.image_filename,
+    response: participantResponse,
+    is_correct: isCorrect === null ? null : (isCorrect ? 1 : 0),
+    rt_ms: responseResult.timedOut ? CONFIG.statementTimeoutDuration : Math.round(rt),
+    feedback_manipulation_type: feedbackManipulationType,
+    feedback_shown_fact_check_for: feedbackShownFactCheckFor === null ? null : (feedbackShownFactCheckFor ? 'TRUE_FACT_CHECK' : 'FALSE_FACT_CHECK'),
+  };
+  log(trialData);
+  show('');
+  await sleep(CONFIG.isiDuration);
+}
+
+// --- BLOCK 1 ---
+async function runBlock1() {
+  show(`<h2>Block 1: Judging Headlines</h2><p>Press SPACE to begin.</p>`);
+  await waitKeys([' ']);
+  for (let i = 0; i < state.inductionStatements.length; i++) {
+    await runSingleTrial(state.inductionStatements[i], 'ConfidenceInduction', i + 1);
+  }
+  runQuestionnaire('pre');
+}
+
+// --- QUESTIONNAIRE ---
+async function runQuestionnaire(timing) {
+  const questions = [
+    { id: 'q_own_ability', text: "How confident are you in your own ability to recognise news that is made up? (1-9)", type: 'number_1-9' },
+    { id: 'q_others_ability', text: "How confident are you in others’ ability to recognise news that is made up? (1-9)", type: 'number_1-9' },
+    { id: 'q_rank', text: "Compared with other people, where do you rank your ability? (1-100)", type: 'number_1-100' }
+  ];
+  for (const q of questions) {
+    show(`
+      <div class="questionnaire-container">
+        <p class="question-text">${q.text}</p>
+        ${q.type === 'number_1-100' ? '<input type="number" id="q_input" min="1" max="100" />' : ''}
+        ${q.type === 'number_1-9' ? '<p class="instructions">Press a number key (1-9)</p>' : '<button id="q_next">Next</button>'}
+      </div>
+    `);
+    let response;
+    if (q.type === 'number_1-9') {
+      const validKeys = ['1','2','3','4','5','6','7','8','9'];
+      const key = await waitKeys(validKeys);
+      response = parseInt(key);
+    } else {
+      await new Promise(resolve => {
+        document.getElementById('q_next').onclick = () => {
+          const val = parseInt(document.getElementById('q_input').value);
+          if (val >= 1 && val <= 100) {
+            response = val;
+            resolve();
+          } else {
+            alert('Please enter a number between 1 and 100.');
+          }
+        };
+      });
+    }
+    state[q.id + '_' + timing] = response;
+  }
+  if (state.data.length > 0) {
+    const lastTrialData = state.data[state.data.length - 1];
+    lastTrialData[`q_own_ability_${timing}`] = state[`q_own_ability_${timing}`];
+    lastTrialData[`q_others_ability_${timing}`] = state[`q_others_ability_${timing}`];
+    lastTrialData[`q_rank_${timing}`] = state[`q_rank_${timing}`];
+  }
+  if (timing === 'pre') {
+    runBlock2();
+  } else {
+    finishExperiment();
+  }
+}
+
+// --- BLOCK 2 ---
+async function runBlock2() {
+  show(`<h2>Block 2: Judging More Headlines</h2><p>Press SPACE to begin.</p>`);
+  await waitKeys([' ']);
+  for (let i = 0; i < state.testStatements.length; i++) {
+    await runSingleTrial(state.testStatements[i], 'TruthTest', i + 1);
+  }
+  runQuestionnaire('post');
+}
+
+// --- FINISH ---
+function finishExperiment(){
+  const csv = toCSV(state.data);
+  const fn  = `${CONFIG.experimentName}_${state.participant}_${state.group}_${Date.now()}.csv`;
+  show('<h2>Uploading your data…</h2><p>Please wait.</p>');
+  uploadCSV(fn,csv)
+    .then(r=>{
+      if(!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+      return r.json();
+    })
+    .then(jsonData => {
+        if (jsonData.success || jsonData.status === 'success' || jsonData.id) {
+             show('<h2>Upload complete!</h2><p>Thank you for your participation. You may now close this window.</p>');
+        } else {
+            throw new Error('Upload reported failure: ' + JSON.stringify(jsonData));
+        }
+    })
+    .catch(err=>{
+      console.error('Upload failed:',err);
+      if(CONFIG.fallbackDownload){
+        downloadCSV(csv,fn);
+        show('<h2>Network error – data downloaded locally.</h2><p>Please ensure the downloaded CSV file is sent to the researcher. You may now close this window.</p>');
+      }else{
+        show('<h2>Sorry – data could not be saved.</h2><p>Please screenshot this page and contact the researcher.</p>');
+      }
+    });
+}
+
+// --- LAUNCH ---
+(async()=>{
+  try{
+    await loadCSVStimuli();
+    introScreen();
+  }catch(e){
+    console.error(e);
+    show(`<p style="color:red;font-weight:bold;">Error: ${e.message}</p><p>Please check the browser console (Ctrl+Shift+J or Cmd+Opt+J) for more details and contact the researcher.</p>`);
+  }
+})();
+</script>
+</body>
+</html>
