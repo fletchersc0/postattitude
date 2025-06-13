@@ -640,14 +640,9 @@ function finishExperiment(){
       if(!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`); // Check for HTTP errors
       return r.json(); // Parse response as JSON
     })
-    .then(jsonData => { // Handle parsed JSON data
-        // Check for success indicators from the data pipe service
-        if (jsonData.success || jsonData.status === 'success' || jsonData.id) {
-             show('<h2>Upload complete!</h2><p>Thank you for your participation. You may now close this window.</p>');
-        } else {
-            // If success indicators are not present, treat as an upload failure
-            throw new Error('Upload reported failure: ' + JSON.stringify(jsonData));
-        }
+    // MODIFIED PART: Assume success if HTTP response is OK and JSON parses, like in Script 2
+    .then(() => { 
+        show('<h2>Upload complete!</h2><p>Thank you for your participation. You may now close this window.</p>');
     })
     .catch(err=>{ // Handle any errors during upload
       console.error('Upload failed:',err);
