@@ -282,7 +282,7 @@ async function introScreen(){
     <h1>${CONFIG.experimentName}</h1>
     <p>Please enter your Prolific ID and the Session Key provided in Qualtrics.</p>
     <input id="pid" placeholder="Prolific ID" /><br>
-    <input id="sessionKey" placeholder="Session Key (e.g. E5K-9N4)" maxlength="8" style="text-transform:uppercase;"/><br>
+    <input id="sessionKey" placeholder="Session Key" maxlength="8"/><br>
     <button id="startBtn">Start</button>
   `);
   document.getElementById('startBtn').onclick = () => {
