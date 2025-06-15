@@ -146,6 +146,17 @@ const sleep = ms => new Promise(r=>setTimeout(r,ms));
 const shuffle = arr=>{ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
 const show = html => stage.innerHTML = html;
 
+// --------------- IMAGE PRELOADER ----------------
+async function preloadImages(list){
+  const promises = list.map(stim => new Promise(res=>{
+    const img=new Image();
+    img.onload=res;
+    img.onerror=res; // resolve even if 404 to avoid stalling
+    img.src='images/'+stim.image_filename;
+  }));
+  await Promise.all(promises);
+}
+
 // ------------------------ DATA LOGGING FUNCTIONS ------------------------
 function log(dataRow) {
   dataRow.timestamp = new Date().toISOString();
@@ -187,9 +198,7 @@ function downloadCSV(csv,fn){
   URL.revokeObjectURL(url);
 }
 
-// ------------------- STIMULUS LOADER (unchanged) -------------------
-// ... (identical to original until the end of loadCSVStimuli) ...
-
+// ------------------- STIMULUS LOADER -------------------
 async function loadCSVStimuli(){
   const response = await fetch(CONFIG.csvFile);
   if (!response.ok) throw new Error(`Failed to load ${CONFIG.csvFile}: ${response.statusText}`);
@@ -230,7 +239,7 @@ async function loadCSVStimuli(){
   state.testStatements = state.stimuliPool.slice(CONFIG.numInductionTrials, CONFIG.numInductionTrials + CONFIG.numTestTrials);
 }
 
-// ------------------- KEYBOARD HELPERS (unchanged) -------------------
+// ------------------- KEYBOARD HELPERS -------------------
 function waitKeys(validKeys) {
   return new Promise(resolve => {
     function onKey(e) {
@@ -262,7 +271,7 @@ function waitKeysOrTimeout(validKeys, timeoutMs) {
   });
 }
 
-// ------------------- FEEDBACK LOGIC (unchanged) -------------------
+// ------------------- FEEDBACK LOGIC -------------------
 function chooseFeedback_truthCompatible(stimulus, participantResponse, group){
   const pAffirmCorrect = CONFIG.feedbackManipulationPercentages[group];
   const epsilon        = CONFIG.epsilonIncorrectAffirm;
@@ -276,7 +285,7 @@ function chooseFeedback_truthCompatible(stimulus, participantResponse, group){
   };
 }
 
-// ------------------- INTRO SCREEN (modified) -------------------
+// ------------------- INTRO SCREEN -------------------
 async function introScreen(){
   show(`
     <h1>${CONFIG.experimentName}</h1>
@@ -297,7 +306,7 @@ async function introScreen(){
   };
 }
 
-// ------------------- CORE TRIAL LOGIC (unchanged except logging session_key) -------------------
+// ------------------- CORE TRIAL LOGIC -------------------
 async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   state.trialCountOverall++;
   show(`<div class="fixation-cross-container">+</div>`);
@@ -310,7 +319,13 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
       <p class="instructions">(F = TRUE / J = FALSE)</p>
     </div>
   `);
+  // Wait until image fully decoded & painted before starting RT
+  const imgEl = document.querySelector('.stimulus-image');
+  if (imgEl) {
+    try { await imgEl.decode(); } catch(e) {/* ignore decode errors */}
+  }
   rtClock = performance.now();
+
   const responseResult = await waitKeysOrTimeout([CONFIG.responseKeys.true_key, CONFIG.responseKeys.false_key], CONFIG.statementTimeoutDuration);
   const rt = performance.now() - rtClock;
   let participantResponse = null;
@@ -362,9 +377,7 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   await sleep(CONFIG.isiDuration);
 }
 
-// ------------------- BLOCK 1 / 2 & QUESTIONNAIRE / FINISH (unchanged) -------------------
-// ... (identical to original implementations) ...
-
+// ------------------- BLOCK 1 / 2 & QUESTIONNAIRE / FINISH -------------------
 async function runBlock1(){
   show(`<h2>Block 1: Judging Headlines</h2><p>Press SPACE to begin.</p>`);
   await waitKeys([' ']);
@@ -444,6 +457,8 @@ function finishExperiment(){
 (async()=>{
   try{
     await loadCSVStimuli();
+    show('<h2>Preloading images…</h2><p>This should only take a few seconds.</p>');
+    await preloadImages(state.stimuliPool);
     introScreen();
   }catch(e){
     console.error(e);
