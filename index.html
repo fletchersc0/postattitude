@@ -409,7 +409,7 @@ async function runQuestionnaire(timing){
     show(`
       <div class="questionnaire-container">
         <p class="question-text">${q.text}</p>
-        ${q.type === 'number_1-100' ? '<input type="number" id="q_input" min="1" max="100" />' : ''}
+        ${q.type === 'number_1-100' ? '<input type="text" id="q_input" inputmode="numeric" pattern="\\d*" />' : ''}
         ${q.type === 'number_1-9' ? '<p class="instructions">Press a number key (1-9)</p>' : '<button id="q_next">Next</button>'}
       </div>
     `);
