@@ -74,6 +74,18 @@
     .instructions { font-size:1rem; color: #ccc; margin-top: 1em;}
     .question-text { font-size:1.2rem; margin-bottom: 1em;}
     .loading { font-size:1.2rem; color: #aaa; }
+    .instructions-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 420px;
+        margin: 1em auto 0 auto;
+    }
+    .instruction-reminder {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #ccc;
+    }
   </style>
 </head>
 <body>
@@ -318,11 +330,13 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   show(`<div class="fixation-cross-container">+</div>`);
   await sleep(CONFIG.fixationCrossDuration);
 
-  let instructionsText = '';
+  let leftInstruction, rightInstruction;
   if (state.keyMapping === 'left_true_right_false') {
-    instructionsText = '(← = TRUE / → = FALSE)';
+    leftInstruction = '← = TRUE';
+    rightInstruction = '→ = FALSE';
   } else {
-    instructionsText = '(→ = TRUE / ← = FALSE)';
+    leftInstruction = '← = FALSE';
+    rightInstruction = '→ = TRUE';
   }
 
   show(`
@@ -330,7 +344,10 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
       <img class="stimulus-image" src="images/${stimulus.image_filename}" alt="headline stimulus" 
            onerror="this.onerror=null;this.style.display='none';document.getElementById('imgerror').style.display='block';">
       <div id="imgerror" class="loading" style="display:none;">[Image not found: ${stimulus.image_filename}]</div>
-      <p class="instructions">${instructionsText}</p>
+      <div class="instructions-container">
+        <span class="instruction-reminder">${leftInstruction}</span>
+        <span class="instruction-reminder">${rightInstruction}</span>
+      </div>
     </div>
   `);
   // Wait until image fully decoded & painted before starting RT
