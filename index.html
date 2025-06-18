@@ -331,12 +331,12 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   await sleep(CONFIG.fixationCrossDuration);
 
   let leftInstruction, rightInstruction;
-  if (state.keyMapping === 'left_true_right_false') {
-    leftInstruction = '← = TRUE';
-    rightInstruction = 'FALSE = →';
-  } else {
-    leftInstruction = '← = FALSE';
-    rightInstruction = 'TRUE = →';
+  if (state.keyMapping === 'q_true_p_false') {
+    leftInstruction = 'Q = TRUE';
+    rightInstruction = 'FALSE = P';
+  } else { // p_true_q_false
+    leftInstruction = 'Q = FALSE';
+    rightInstruction = 'TRUE = P';
   }
 
   show(`
@@ -357,7 +357,7 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   }
   rtClock = performance.now();
 
-  const responseResult = await waitKeysOrTimeout(['arrowleft', 'arrowright'], CONFIG.statementTimeoutDuration);
+  const responseResult = await waitKeysOrTimeout(['q', 'p'], CONFIG.statementTimeoutDuration);
   const rt = performance.now() - rtClock;
   let participantResponse = null;
   let isCorrect = null;
@@ -374,10 +374,10 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
     show(`<div class="feedback-container"><p class="feedback-text">${feedbackText}</p></div>`);
     await sleep(CONFIG.timeoutFeedbackDuration);
   } else {
-    if (state.keyMapping === 'left_true_right_false') {
-        participantResponse = (keyPressed === 'arrowleft') ? 'True' : 'False';
-    } else { // right_true_left_false
-        participantResponse = (keyPressed === 'arrowright') ? 'True' : 'False';
+    if (state.keyMapping === 'q_true_p_false') {
+        participantResponse = (keyPressed === 'q') ? 'True' : 'False';
+    } else { // p_true_q_false
+        participantResponse = (keyPressed === 'p') ? 'True' : 'False';
     }
     
     isCorrect = (participantResponse === 'True') === stimulus.is_true;
@@ -508,19 +508,19 @@ async function runDemographics() {
 
 // ------------------- NEW: KEY MAPPING INSTRUCTIONS -------------------
 async function showKeyMappingInstructions() {
-    state.keyMapping = (Math.random() < 0.5) ? 'left_true_right_false' : 'right_true_left_false';
+    state.keyMapping = (Math.random() < 0.5) ? 'q_true_p_false' : 'p_true_q_false';
     
     let instructionsText = '';
-    if (state.keyMapping === 'left_true_right_false') {
+    if (state.keyMapping === 'q_true_p_false') {
         instructionsText = `
-            For this study, you will use the arrow keys to respond.<br><br>
-            Press the <b>LEFT (←)</b> arrow key for <b>TRUE</b>.<br>
-            Press the <b>RIGHT (→)</b> arrow key for <b>FALSE</b>.`;
+            For this study, you will use the 'Q' and 'P' keys to respond.<br><br>
+            Press the <b>Q</b> key for <b>TRUE</b>.<br>
+            Press the <b>P</b> key for <b>FALSE</b>.`;
     } else {
         instructionsText = `
-            For this study, you will use the arrow keys to respond.<br><br>
-            Press the <b>RIGHT (→)</b> arrow key for <b>TRUE</b>.<br>
-            Press the <b>LEFT (←)</b> arrow key for <b>FALSE</b>.`;
+            For this study, you will use the 'Q' and 'P' keys to respond.<br><br>
+            Press the <b>P</b> key for <b>TRUE</b>.<br>
+            Press the <b>Q</b> key for <b>FALSE</b>.`;
     }
 
     show(`
