@@ -92,7 +92,6 @@ const SESSION_KEYS = {
 const CONFIG = {
   experimentName         : 'News Confidence Task',
   csvFile                : 'statements_master.csv',
-  responseKeys           : { true_key: 'f', false_key: 'j' },
   dataPipeID             : 'qWHxwr6D720q',
   fallbackDownload       : true,
   fixationCrossDuration  : 500,
@@ -112,7 +111,7 @@ const CONFIG = {
   masterHeader : [
     'pid', 'session_key', 'group', 'block_type', 'trial_number_in_block', 'trial_number_overall',
     'statement_id', 'statement_text', 'statement_truth_value', 'image_filename',
-    'response', 'is_correct', 'rt_ms',
+    'response', 'is_correct', 'rt_ms', 'key_mapping', 'key_pressed',
     'feedback_manipulation_type', 'feedback_shown_fact_check_for',
     'q_own_ability_pre', 'q_others_ability_pre', 'q_rank_pre',
     'q_own_ability_post', 'q_others_ability_post', 'q_rank_post',
@@ -126,6 +125,7 @@ const state = {
   participant : '',
   sessionKey  : '',
   group       : '',
+  keyMapping  : null,
   stimuliPool : [],
   inductionStatements: [],
   testStatements: [],
@@ -317,12 +317,20 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   state.trialCountOverall++;
   show(`<div class="fixation-cross-container">+</div>`);
   await sleep(CONFIG.fixationCrossDuration);
+
+  let instructionsText = '';
+  if (state.keyMapping === 'left_true_right_false') {
+    instructionsText = '(← = TRUE / → = FALSE)';
+  } else {
+    instructionsText = '(→ = TRUE / ← = FALSE)';
+  }
+
   show(`
     <div class="statement-container">
       <img class="stimulus-image" src="images/${stimulus.image_filename}" alt="headline stimulus" 
            onerror="this.onerror=null;this.style.display='none';document.getElementById('imgerror').style.display='block';">
       <div id="imgerror" class="loading" style="display:none;">[Image not found: ${stimulus.image_filename}]</div>
-      <p class="instructions">(F = TRUE / J = FALSE)</p>
+      <p class="instructions">${instructionsText}</p>
     </div>
   `);
   // Wait until image fully decoded & painted before starting RT
@@ -332,13 +340,15 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   }
   rtClock = performance.now();
 
-  const responseResult = await waitKeysOrTimeout([CONFIG.responseKeys.true_key, CONFIG.responseKeys.false_key], CONFIG.statementTimeoutDuration);
+  const responseResult = await waitKeysOrTimeout(['arrowleft', 'arrowright'], CONFIG.statementTimeoutDuration);
   const rt = performance.now() - rtClock;
   let participantResponse = null;
   let isCorrect = null;
   let feedbackText = '';
   let feedbackManipulationType = '';
   let feedbackShownFactCheckFor = null;
+  let keyPressed = responseResult.key;
+
   if (responseResult.timedOut) {
     participantResponse = 'TIMEOUT';
     isCorrect = null;
@@ -347,7 +357,12 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
     show(`<div class="feedback-container"><p class="feedback-text">${feedbackText}</p></div>`);
     await sleep(CONFIG.timeoutFeedbackDuration);
   } else {
-    participantResponse = responseResult.key === CONFIG.responseKeys.true_key ? 'True' : 'False';
+    if (state.keyMapping === 'left_true_right_false') {
+        participantResponse = (keyPressed === 'arrowleft') ? 'True' : 'False';
+    } else { // right_true_left_false
+        participantResponse = (keyPressed === 'arrowright') ? 'True' : 'False';
+    }
+    
     isCorrect = (participantResponse === 'True') === stimulus.is_true;
     if (blockType === 'ConfidenceInduction' && state.group !== 'Control') {
       const fb = chooseFeedback_truthCompatible(stimulus, participantResponse, state.group);
@@ -375,6 +390,8 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
     response: participantResponse,
     is_correct: isCorrect === null ? null : (isCorrect ? 1 : 0),
     rt_ms: responseResult.timedOut ? CONFIG.statementTimeoutDuration : Math.round(rt),
+    key_mapping: state.keyMapping,
+    key_pressed: keyPressed,
     feedback_manipulation_type: feedbackManipulationType,
     feedback_shown_fact_check_for: feedbackShownFactCheckFor === null ? null : (feedbackShownFactCheckFor ? 'TRUE_FACT_CHECK' : 'FALSE_FACT_CHECK'),
   };
@@ -469,6 +486,34 @@ async function runDemographics() {
         };
     });
 
+    showKeyMappingInstructions();
+}
+
+// ------------------- NEW: KEY MAPPING INSTRUCTIONS -------------------
+async function showKeyMappingInstructions() {
+    state.keyMapping = (Math.random() < 0.5) ? 'left_true_right_false' : 'right_true_left_false';
+    
+    let instructionsText = '';
+    if (state.keyMapping === 'left_true_right_false') {
+        instructionsText = `
+            For this study, you will use the arrow keys to respond.<br><br>
+            Press the <b>LEFT (←)</b> arrow key for <b>TRUE</b>.<br>
+            Press the <b>RIGHT (→)</b> arrow key for <b>FALSE</b>.`;
+    } else {
+        instructionsText = `
+            For this study, you will use the arrow keys to respond.<br><br>
+            Press the <b>RIGHT (→)</b> arrow key for <b>TRUE</b>.<br>
+            Press the <b>LEFT (←)</b> arrow key for <b>FALSE</b>.`;
+    }
+
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">${instructionsText}</p>
+            <p class="instructions"><br>Press the SPACE bar to begin.</p>
+        </div>
+    `);
+
+    await waitKeys([' ']);
     runBlock1();
 }
 
@@ -582,6 +627,10 @@ function finishExperiment(){
     row.education = state.education;
     row.responded_randomly = state.responded_randomly;
     row.searched_internet = state.searched_internet;
+    // key_mapping is already on each trial row, but this ensures it if needed elsewhere.
+    if (!row.key_mapping) {
+        row.key_mapping = state.keyMapping;
+    }
   });
 
   const csv = toCSV(state.data);
