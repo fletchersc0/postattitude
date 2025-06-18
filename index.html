@@ -646,14 +646,13 @@ async function runDebrief() {
 
 // ------------------- DEBRIEFING PAGE -------------------
 function downloadFactChecks() {
-    let content = "Fact-Checks for All Headlines\n==============================\n\n";
-    state.stimuliPool.forEach(stim => {
-        content += `HEADLINE: ${stim.text}\n`;
-        content += `------------------------\n`;
-        content += `FACT-CHECK (if TRUE): ${stim.fact_check_true}\n`;
-        content += `FACT-CHECK (if FALSE): ${stim.fact_check_false}\n\n`;
-    });
-    downloadFile(content, 'fact-checks.txt', 'text/plain');
+    // This function now triggers a download of the static file from the repository.
+    const a = document.createElement('a');
+    a.href = 'fact-checks.txt';
+    a.download = 'fact-checks.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 async function showDebriefing() {
