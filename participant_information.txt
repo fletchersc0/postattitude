@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Participant Information Sheet – Rapid fact-checking of neutral news</title>
+</head>
+<body>
+  <h1>Participant Information Sheet</h1>
+
+  <h2>Title</h2>
+  <p>Rapid fact-checking of neutral news</p>
+
+  <h2>Principal Investigator / Senior Supervisor</h2>
+  <p>Lauren Saling</p>
+
+  <h2>Associate Investigator / Associate Supervisor</h2>
+  <p>Damiano Spina</p>
+
+  <h2>Principal Research Student</h2>
+  <p>Fletcher Scott</p>
+
+  <!-- 1 -->
+  <h2>1. Introduction</h2>
+  <p>You are invited to take part in this research project, which is called <em>“Rapid fact-checking of neutral news.”</em> This Participant Information Sheet tells you about the project and explains what taking part involves, helping you decide whether you wish to participate.</p>
+  <p>Please read this information carefully and feel free to ask questions about anything you do not understand. You might also wish to discuss participation with a relative or friend.</p>
+  <p>Participation is voluntary. If you do not wish to take part, you do not have to.</p>
+  <p>If you decide to participate, you may continue to the task after reading this sheet. By completing the task you are telling us that you:</p>
+  <ul>
+    <li>Understand what you have read.</li>
+    <li>Consent to take part in the research project.</li>
+  </ul>
+  <p>You may download a copy of this information sheet to keep.</p>
+
+  <!-- 2 -->
+  <h2>2. What is the purpose of this research?</h2>
+  <p>Today’s news landscape exposes people to an ever-increasing volume of content within very short timeframes, especially on social media. Individuals therefore encounter political claims almost instantaneously and must rapidly judge reliability to avoid forming beliefs based on misinformation.</p>
+  <p>The study aims to examine the speed and efficiency with which people evaluate political claims. Results will contribute to Fletcher Scott’s PhD in Psychology and are funded by the ARC Centre of Excellence for Automated Decision-Making and Society.</p>
+
+  <!-- 3 -->
+  <h2>3. What does participation in this research involve?</h2>
+  <p>If you choose to take part you will:</p>
+  <ol>
+    <li>Complete a brief screening questionnaire (≈ 1 minute) to confirm eligibility.</li>
+    <li>If eligible, respond to a set of news items and provide non-identifying demographic information.</li>
+  </ol>
+  <p>The full study takes about 15 minutes. There are no costs to you. You will be paid ( ) for participation and may receive a performance-based bonus.</p>
+
+  <!-- 4 -->
+  <h2>4. Other relevant information about the research project</h2>
+  <p>Approximately 90 participants will take part in this study.</p>
+
+  <!-- 5 -->
+  <h2>5. Do I have to take part in this research project?</h2>
+  <p>No. Participation is entirely voluntary. You may withdraw at any time before submitting your responses. Once submitted, data are non-identifiable and cannot be withdrawn. Your decision will not affect your relationship with the researchers or with RMIT University.</p>
+
+  <!-- 6 -->
+  <h2>6. What are the possible benefits of taking part?</h2>
+  <p>While no personal benefit is guaranteed, you may value contributing to knowledge and learning more about world events. The broader community may benefit from interventions that improve how users assess news reliability.</p>
+
+  <!-- 7 -->
+  <h2>7. What are the risks and disadvantages of taking part?</h2>
+
+  <h3>Psychological distress</h3>
+  <p>Some questions may be stressful or upsetting. You may skip any question or stop immediately. If you feel distressed, contact your GP or a mental-health service such as:</p>
+  <ul>
+    <li><strong>Beyond Blue</strong> – 1300 224 636 – <a href="https://www.beyondblue.org.au">beyondblue.org.au</a></li>
+    <li><strong>Headspace</strong> – 1800 650 890 – <a href="https://headspace.org.au">headspace.org.au</a></li>
+  </ul>
+
+  <h3>Privacy concerns</h3>
+  <p>This survey is hosted on Qualtrics. No personal information is collected. After data collection and analysis, de-identified data are transferred to secure RMIT servers for five years; data on the host server are then deleted.</p>
+
+  <!-- 8 -->
+  <h2>8. What if I withdraw from this research project?</h2>
+  <p>You may withdraw at any time before submission. Because responses are anonymous, once submitted they cannot be withdrawn.</p>
+
+  <!-- 9 -->
+  <h2>9. What happens when the research project ends?</h2>
+  <p>Email Fletcher Scott (<a href="mailto:s3954401@student.rmit.edu.au">s3954401@student.rmit.edu.au</a>) or Lauren Saling (<a href="mailto:lauren.saling@rmit.edu.au">lauren.saling@rmit.edu.au</a>) after December 2025 if you would like a summary of the results.</p>
+
+  <!-- 10 -->
+  <h2>10. What will happen to information about me?</h2>
+  <p>By proceeding to the survey, you consent to the research team collecting and using your information. No identifying data will be collected. Results may be published or presented, but only in aggregate form. Anonymous data may be stored indefinitely in a public repository so other researchers can verify the findings.</p>
+
+  <!-- 11 -->
+  <h2>11. Who is organising and funding the research?</h2>
+  <p>The project is conducted by Dr Lauren Saling, Dr Damiano Spina and Fletcher Scott, and is funded by the ARC Centre of Excellence for Automated Decision-Making and Society.</p>
+
+  <!-- 12 -->
+  <h2>12. Who has reviewed the research project?</h2>
+  <p>The project has been approved by an RMIT University Human Research Ethics Committee and will be carried out in accordance with the <em>National Statement on Ethical Conduct in Human Research (2023)</em>.</p>
+
+  <!-- 13 -->
+  <h2>13. Further information and who to contact</h2>
+  <p>For further information, please contact:</p>
+  <ul>
+    <li>Fletcher Scott – +61 455 660 711 – <a href="mailto:s3954401@student.rmit.edu.au">s3954401@student.rmit.edu.au</a></li>
+    <li>Lauren Saling – +61 3 9925 3801 – <a href="mailto:lauren.saling@rmit.edu.au">lauren.saling@rmit.edu.au</a></li>
+    <li>Damiano Spina – +61 3 9925 0941 – <a href="mailto:damiano.spina@rmit.edu.au">damiano.spina@rmit.edu.au</a></li>
+  </ul>
+
+  <!-- 14 -->
+  <h2>14. Complaints</h2>
+  <p>If you have concerns you prefer not to discuss with the research team, contact:</p>
+  <p>Anita Arndt (HREC Secretary)<br>
+     Phone: 03 9925 5037<br>
+     Email: <a href="mailto:humanethics@rmit.edu.au">humanethics@rmit.edu.au</a><br>
+     Mail: Manager, Research Governance and Ethics, RMIT University, GPO Box 2476, Melbourne VIC 3001</p>
+
+  <!-- Acknowledgement -->
+  <h2>Acknowledgement by Participant – continuing to the survey indicates that:</h2>
+  <ul>
+    <li>I have read and understood this Participant Information Sheet.</li>
+    <li>I understand the purposes, procedures and risks of the research described.</li>
+    <li>I have had an opportunity to ask questions and am satisfied with the answers received.</li>
+    <li>I freely agree to participate in this research project and understand I may withdraw at any time without affecting my relationship with RMIT.</li>
+    <li>I understand that I can print or download a copy of this document for my records.</li>
+  </ul>
+</body>
+</html>
