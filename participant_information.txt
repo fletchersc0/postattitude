@@ -24,7 +24,7 @@
 
   <main>
     <h2>1. Introduction</h2>
-    <p>You are invited to take part in this research project, which is called <em>Rapid fact‑checking of neutral news</em>. This Participant Information Form tells you about the research project. It explains the processes involved with taking part. Knowing what is involved will help you decide if you want to take part in the research.</p>
+    <p>You are invited to take part in this research project, which is called <em>Rapid fact‑checking of news</em>. This Participant Information Form tells you about the research project. It explains the processes involved with taking part. Knowing what is involved will help you decide if you want to take part in the research.</p>
     <p>Please read this information carefully. Ask questions about anything that you don’t understand or want to know more about. Before deciding whether to take part, you might want to talk about it with a relative or friend.</p>
     <p>Participation in this research is voluntary. If you don’t wish to take part, you don’t have to.</p>
     <p>If you decide you want to take part in the research project, you may continue onwards to the task after reading this Participant Information sheet.</p>
