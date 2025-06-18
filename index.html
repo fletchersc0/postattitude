@@ -308,8 +308,8 @@ async function introScreen(){
   show(`
     <h1>${CONFIG.experimentName}</h1>
     <p>Please enter your Prolific ID and the Session Key provided in Qualtrics.</p>
-    <input id="pid" placeholder="Prolific ID" /><br>
-    <input id="sessionKey" placeholder="Session Key" maxlength="8"/><br>
+    <input id="pid" placeholder="Prolific ID" autocomplete="off" /><br>
+    <input id="sessionKey" placeholder="Session Key" maxlength="8" autocomplete="off" /><br>
     <button id="startBtn">Start</button>
   `);
   document.getElementById('startBtn').onclick = () => {
@@ -422,7 +422,7 @@ async function runDemographics() {
     show(`
         <div class="questionnaire-container">
             <p class="question-text">Please enter your age:</p>
-            <input type="number" id="q_input" min="1" />
+            <input type="number" id="q_input" min="1" autocomplete="off" />
             <button id="q_next">Next</button>
         </div>
     `);
@@ -441,7 +441,7 @@ async function runDemographics() {
     show(`
         <div class="questionnaire-container">
             <p class="question-text">Please select your gender:</p>
-            <select id="q_input">
+            <select id="q_input" autocomplete="off">
                 <option value="" disabled selected>Select an option</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -449,7 +449,7 @@ async function runDemographics() {
                 <option value="prefer-not-to-say">Prefer not to say</option>
                 <option value="other">Other (please specify)</option>
             </select>
-            <input type="text" id="q_other_text" style="display:none;" placeholder="Please specify" />
+            <input type="text" id="q_other_text" style="display:none;" placeholder="Please specify" autocomplete="off" />
             <button id="q_next">Next</button>
         </div>
     `);
@@ -480,7 +480,7 @@ async function runDemographics() {
     show(`
         <div class="questionnaire-container">
             <p class="question-text">What is your highest level of education?</p>
-            <select id="q_input">
+            <select id="q_input" autocomplete="off">
                 <option value="" disabled selected>Select an option</option>
                 <option value="no-highschool">Did not complete highschool</option>
                 <option value="highschool">Year 12 or equivalent</option>
@@ -567,7 +567,7 @@ async function runQuestionnaire(timing){
     show(`
       <div class="questionnaire-container">
         <p class="question-text">${q.text}</p>
-        ${q.type === 'number_1-100' ? '<input type="text" id="q_input" inputmode="numeric" pattern="\\d*" />' : ''}
+        ${q.type === 'number_1-100' ? '<input type="text" id="q_input" inputmode="numeric" pattern="\\d*" autocomplete="off" />' : ''}
         ${q.type === 'number_1-9' ? '<p class="instructions">Press a number key (1-9)</p>' : '<button id="q_next">Next</button>'}
       </div>
     `);
