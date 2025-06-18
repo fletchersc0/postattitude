@@ -1,120 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Participant Information Sheet – Rapid fact-checking of neutral news</title>
+  <meta charset="UTF-8" />
+  <title>Participant Information and Consent Form – Rapid fact‑checking of news</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;line-height:1.6;margin:0;padding:2rem;background:#fff;color:#000;}
+    h1,h2,h3{color:#003366;margin-top:1.5rem;}
+    table{width:100%;border-collapse:collapse;margin:1rem 0;}
+    table,th,td{border:1px solid #666;}
+    th,td{padding:.5rem;text-align:left;vertical-align:top;}
+    ul{margin-left:1.5rem;}
+    footer{font-size:.8rem;margin-top:2rem;}
+  </style>
 </head>
 <body>
-  <h1>Participant Information Sheet</h1>
+  <header>
+    <h1>Participant Information Form</h1>
+    <p><strong>Title:</strong> Rapid fact‑checking of news</p>
+    <p><strong>Principal Investigator&nbsp;/ Senior Supervisor:</strong> Dr&nbsp;Lauren&nbsp;Saling</p>
+    <p><strong>Associate Investigator(s)&nbsp;/ Associate Supervisor(s):</strong> Dr&nbsp;Damiano&nbsp;Spina</p>
+    <p><strong>Principal Research Student:</strong> Fletcher&nbsp;Scott</p>
+  </header>
 
-  <h2>Title</h2>
-  <p>Rapid fact-checking of neutral news</p>
+  <main>
+    <h2>1. Introduction</h2>
+    <p>You are invited to take part in this research project, which is called <em>Rapid fact‑checking of neutral news</em>. This Participant Information Form tells you about the research project. It explains the processes involved with taking part. Knowing what is involved will help you decide if you want to take part in the research.</p>
+    <p>Please read this information carefully. Ask questions about anything that you don’t understand or want to know more about. Before deciding whether to take part, you might want to talk about it with a relative or friend.</p>
+    <p>Participation in this research is voluntary. If you don’t wish to take part, you don’t have to.</p>
+    <p>If you decide you want to take part in the research project, you may continue onwards to the task after reading this Participant Information sheet.</p>
+    <p>By completing the task you are telling us that you:</p>
+    <ul>
+      <li>Understand what you have read</li>
+      <li>Consent to take part in the research project</li>
+    </ul>
+    <p>You may download a copy of this to keep.</p>
 
-  <h2>Principal Investigator / Senior Supervisor</h2>
-  <p>Lauren Saling</p>
+    <h2>2. What is the purpose of this research?</h2>
+    <p>In today’s news‑media landscape, people are exposed to an ever‑increasing volume of content within very short timeframes. This rapid influx of information on social media means that individuals often encounter political claims and news updates almost instantaneously. In such an environment, it is crucial for news consumers to quickly assess the reliability of statements to prevent the formation of beliefs based on misinformation.</p>
+    <p>The aim of the study is to investigate the speed and efficiency at which people evaluate political claims. This research has been initiated by the researchers, Dr&nbsp;Lauren&nbsp;Saling, Dr&nbsp;Damiano&nbsp;Spina and PhD Candidate Fletcher&nbsp;Scott. Study results will be used by Fletcher&nbsp;Scott to obtain a PhD in Psychology. This research is funded by the ARC Centre of Excellence for Automated Decision‑Making and Society.</p>
 
-  <h2>Associate Investigator / Associate Supervisor</h2>
-  <p>Damiano Spina</p>
+    <h2>3. What does participation in this research involve?</h2>
+    <p>If you decide to take part in the research project, you will first be given a questionnaire asking about your age; this will determine if you are eligible to take part. Completing the questionnaire will take approximately one minute.</p>
+    <p>If the screening questionnaire shows that you meet the requirements, then you will be able to participate in the research project. The screening questionnaire may show that you cannot participate in the research project.</p>
+    <p>If you are eligible to participate and decide to take part, you will be asked to respond to a set of news items. You will also be asked to provide non‑identifying demographic information.</p>
+    <p>The expected duration of the study is 15&nbsp;minutes.</p>
+    <p>There are no costs associated with participating in this research project. You will be paid <strong>$7</strong> for your participation.</p>
 
-  <h2>Principal Research Student</h2>
-  <p>Fletcher Scott</p>
+    <h2>4. Other relevant information about the research project</h2>
+    <p>Approximately 144 participants will take part in the study.</p>
 
-  <!-- 1 -->
-  <h2>1. Introduction</h2>
-  <p>You are invited to take part in this research project, which is called <em>“Rapid fact-checking of neutral news.”</em> This Participant Information Sheet tells you about the project and explains what taking part involves, helping you decide whether you wish to participate.</p>
-  <p>Please read this information carefully and feel free to ask questions about anything you do not understand. You might also wish to discuss participation with a relative or friend.</p>
-  <p>Participation is voluntary. If you do not wish to take part, you do not have to.</p>
-  <p>If you decide to participate, you may continue to the task after reading this sheet. By completing the task you are telling us that you:</p>
-  <ul>
-    <li>Understand what you have read.</li>
-    <li>Consent to take part in the research project.</li>
-  </ul>
-  <p>You may download a copy of this information sheet to keep.</p>
+    <h2>5. Do I have to take part in this research project?</h2>
+    <p>Participation in any research project is voluntary. If you do not wish to take part, you do not have to. If you decide to take part and later change your mind, you are free to withdraw from the project at any stage.</p>
+    <p>If you do decide to take part, you will be given this Participant Information Sheet to sign and you will be given a copy to keep.</p>
+    <p>Your decision whether to take part or not to take part, or to take part and then withdraw, will not affect your relationship with the researchers or with RMIT University.</p>
+    <p>Submitting your completed questionnaire is an indication of your consent to participate in the study. You can withdraw your responses any time before you have submitted the questionnaire. Once you have submitted it, your responses cannot be withdrawn because they are non‑identifiable and therefore we will not be able to tell which one is yours.</p>
 
-  <!-- 2 -->
-  <h2>2. What is the purpose of this research?</h2>
-  <p>Today’s news landscape exposes people to an ever-increasing volume of content within very short timeframes, especially on social media. Individuals therefore encounter political claims almost instantaneously and must rapidly judge reliability to avoid forming beliefs based on misinformation.</p>
-  <p>The study aims to examine the speed and efficiency with which people evaluate political claims. Results will contribute to Fletcher Scott’s PhD in Psychology and are funded by the ARC Centre of Excellence for Automated Decision-Making and Society.</p>
+    <h2>6. What are the possible benefits of taking part?</h2>
+    <p>We cannot guarantee or promise that you will receive any benefits from this research; however, you may appreciate contributing to knowledge. Possible benefits may include gaining new knowledge about world events and current news. The community will also benefit from your participation in the research. News consumers must constantly assess the reliability of news content and change their beliefs based on this feedback. Your data may aid in the creation of targeted interventions that help users engage with this process.</p>
 
-  <!-- 3 -->
-  <h2>3. What does participation in this research involve?</h2>
-  <p>If you choose to take part you will:</p>
-  <ol>
-    <li>Complete a brief screening questionnaire (≈ 1 minute) to confirm eligibility.</li>
-    <li>If eligible, respond to a set of news items and provide non-identifying demographic information.</li>
-  </ol>
-  <p>The full study takes about 15 minutes. There are no costs to you. You will be paid ( ) for participation and may receive a performance-based bonus.</p>
+    <h2>7. What are the risks and disadvantages of taking part?</h2>
+    <h3>Psychological distress</h3>
+    <p>You may feel that some of the questions we ask are stressful or upsetting. If you do not wish to answer a question, you may stop immediately. If you become upset or distressed because of your participation in the research project, please contact your GP or use the following resources for country‑specific mental‑health support: <a href="https://letstalkaboutmentalhealth.com.au/resources/" target="_blank" rel="noopener">Let’s Talk About Mental Health</a> or <a href="https://checkpointorg.com/global/" target="_blank" rel="noopener">Checkpoint</a>.</p>
+    <h3>Privacy concerns</h3>
+    <p>This project will use an external site to create, collect and analyse data collected in a survey format. The site we are using is <em>Qualtrics</em>. If you agree to participate in this survey, the responses you provide will be stored on their host server. No personal information will be collected in the survey so none will be stored as data. Once we have completed our data collection and analysis, we will import the data to the RMIT server where it will be stored securely for five years. The data on the host server will then be deleted and expunged.</p>
 
-  <!-- 4 -->
-  <h2>4. Other relevant information about the research project</h2>
-  <p>Approximately 90 participants will take part in this study.</p>
+    <h2>8. What if I withdraw from this research project?</h2>
+    <p>If you do consent to participate, you may withdraw at any time. However, given that your responses are anonymous, once submitted your responses cannot be withdrawn.</p>
 
-  <!-- 5 -->
-  <h2>5. Do I have to take part in this research project?</h2>
-  <p>No. Participation is entirely voluntary. You may withdraw at any time before submitting your responses. Once submitted, data are non-identifiable and cannot be withdrawn. Your decision will not affect your relationship with the researchers or with RMIT University.</p>
+    <h2>9. What happens when the research project ends?</h2>
+    <p>Please email Fletcher&nbsp;Scott (<a href="mailto:s3954401@student.rmit.edu.au">s3954401@student.rmit.edu.au</a>) or Dr&nbsp;Lauren&nbsp;Saling (<a href="mailto:lauren.saling@rmit.edu.au">lauren.saling@rmit.edu.au</a>) after December&nbsp;2025 if you would like to receive a results summary.</p>
 
-  <!-- 6 -->
-  <h2>6. What are the possible benefits of taking part?</h2>
-  <p>While no personal benefit is guaranteed, you may value contributing to knowledge and learning more about world events. The broader community may benefit from interventions that improve how users assess news reliability.</p>
+    <h2>10. What will happen to information about me?</h2>
+    <p>By continuing to the survey, you are consenting to the research team collecting and using information from you for the research project. Any information obtained in connection with this research project that can identify you will remain confidential. No personal data will be collected, and none will be stored.</p>
+    <p>It is anticipated that the results of this research project will be published and/or presented in a variety of forums. In any publication and/or presentation, information will be provided in such a way that you cannot be identified. In the event of publication, anonymous data will be stored indefinitely in a data repository so that other researchers can verify study results if they so choose.</p>
 
-  <!-- 7 -->
-  <h2>7. What are the risks and disadvantages of taking part?</h2>
+    <h2>11. Who is organising and funding the research?</h2>
+    <p>This research is being conducted by Dr&nbsp;Lauren&nbsp;Saling, Dr&nbsp;Damiano&nbsp;Spina and Fletcher&nbsp;Scott. It is funded by the ARC Centre of Excellence for Automated Decision‑Making and Society.</p>
 
-  <h3>Psychological distress</h3>
-  <p>Some questions may be stressful or upsetting. You may skip any question or stop immediately. If you feel distressed, contact your GP or a mental-health service such as:</p>
-  <ul>
-    <li><strong>Beyond Blue</strong> – 1300 224 636 – <a href="https://www.beyondblue.org.au">beyondblue.org.au</a></li>
-    <li><strong>Headspace</strong> – 1800 650 890 – <a href="https://headspace.org.au">headspace.org.au</a></li>
-  </ul>
+    <h2>12. Who has reviewed the research project?</h2>
+    <p>All research in Australia involving humans is reviewed by an independent ethics‑review body. This research project has been approved by one of the RMIT University review bodies. This project will be carried out according to the <em>National Statement on Ethical Conduct in Human Research (2023)</em>. This statement has been developed to protect the interests of people who agree to participate in human‑research studies.</p>
 
-  <h3>Privacy concerns</h3>
-  <p>This survey is hosted on Qualtrics. No personal information is collected. After data collection and analysis, de-identified data are transferred to secure RMIT servers for five years; data on the host server are then deleted.</p>
+    <h2>13. Further information and who to contact</h2>
+    <table>
+      <tr><th>Name</th><th>Position</th><th>Telephone</th><th>Email</th></tr>
+      <tr><td>Lauren Saling</td><td>Principal investigator / Senior supervisor</td><td>+61 3 9925 3801</td><td><a href="mailto:lauren.saling@rmit.edu.au">lauren.saling@rmit.edu.au</a></td></tr>
+      <tr><td>Damiano Spina</td><td>Senior supervisor</td><td>+61 3 9925 0941</td><td><a href="mailto:damiano.spina@rmit.edu.au">damiano.spina@rmit.edu.au</a></td></tr>
+    </table>
 
-  <!-- 8 -->
-  <h2>8. What if I withdraw from this research project?</h2>
-  <p>You may withdraw at any time before submission. Because responses are anonymous, once submitted they cannot be withdrawn.</p>
+    <h2>14. Complaints</h2>
+    <p>Should you have any concerns or questions about this research project, which you do not wish to discuss with the researchers listed in this document, then you may contact:</p>
+    <table>
+      <tr><th>Reviewing HREC name</th><td>RMIT University</td></tr>
+      <tr><th>HREC Secretary</th><td>Pascal Bernard</td></tr>
+      <tr><th>Telephone</th><td>03 9925 1985</td></tr>
+      <tr><th>Email</th><td><a href="mailto:humanethics@rmit.edu.au">humanethics@rmit.edu.au</a></td></tr>
+      <tr><th>Mailing address</th><td>Manager, Research Governance and Ethics<br>RMIT University<br>GPO Box 2476<br>Melbourne VIC 3001</td></tr>
+    </table>
+  </main>
 
-  <!-- 9 -->
-  <h2>9. What happens when the research project ends?</h2>
-  <p>Email Fletcher Scott (<a href="mailto:s3954401@student.rmit.edu.au">s3954401@student.rmit.edu.au</a>) or Lauren Saling (<a href="mailto:lauren.saling@rmit.edu.au">lauren.saling@rmit.edu.au</a>) after December 2025 if you would like a summary of the results.</p>
-
-  <!-- 10 -->
-  <h2>10. What will happen to information about me?</h2>
-  <p>By proceeding to the survey, you consent to the research team collecting and using your information. No identifying data will be collected. Results may be published or presented, but only in aggregate form. Anonymous data may be stored indefinitely in a public repository so other researchers can verify the findings.</p>
-
-  <!-- 11 -->
-  <h2>11. Who is organising and funding the research?</h2>
-  <p>The project is conducted by Dr Lauren Saling, Dr Damiano Spina and Fletcher Scott, and is funded by the ARC Centre of Excellence for Automated Decision-Making and Society.</p>
-
-  <!-- 12 -->
-  <h2>12. Who has reviewed the research project?</h2>
-  <p>The project has been approved by an RMIT University Human Research Ethics Committee and will be carried out in accordance with the <em>National Statement on Ethical Conduct in Human Research (2023)</em>.</p>
-
-  <!-- 13 -->
-  <h2>13. Further information and who to contact</h2>
-  <p>For further information, please contact:</p>
-  <ul>
-    <li>Fletcher Scott – +61 455 660 711 – <a href="mailto:s3954401@student.rmit.edu.au">s3954401@student.rmit.edu.au</a></li>
-    <li>Lauren Saling – +61 3 9925 3801 – <a href="mailto:lauren.saling@rmit.edu.au">lauren.saling@rmit.edu.au</a></li>
-    <li>Damiano Spina – +61 3 9925 0941 – <a href="mailto:damiano.spina@rmit.edu.au">damiano.spina@rmit.edu.au</a></li>
-  </ul>
-
-  <!-- 14 -->
-  <h2>14. Complaints</h2>
-  <p>If you have concerns you prefer not to discuss with the research team, contact:</p>
-  <p>Anita Arndt (HREC Secretary)<br>
-     Phone: 03 9925 5037<br>
-     Email: <a href="mailto:humanethics@rmit.edu.au">humanethics@rmit.edu.au</a><br>
-     Mail: Manager, Research Governance and Ethics, RMIT University, GPO Box 2476, Melbourne VIC 3001</p>
-
-  <!-- Acknowledgement -->
-  <h2>Acknowledgement by Participant – continuing to the survey indicates that:</h2>
-  <ul>
-    <li>I have read and understood this Participant Information Sheet.</li>
-    <li>I understand the purposes, procedures and risks of the research described.</li>
-    <li>I have had an opportunity to ask questions and am satisfied with the answers received.</li>
-    <li>I freely agree to participate in this research project and understand I may withdraw at any time without affecting my relationship with RMIT.</li>
-    <li>I understand that I can print or download a copy of this document for my records.</li>
-  </ul>
+  <footer>
+    <p>Participant Information and Consent Form – 09/01/2025</p>
+  </footer>
 </body>
 </html>
