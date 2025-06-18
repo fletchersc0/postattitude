@@ -333,10 +333,10 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   let leftInstruction, rightInstruction;
   if (state.keyMapping === 'left_true_right_false') {
     leftInstruction = '← = TRUE';
-    rightInstruction = '→ = FALSE';
+    rightInstruction = 'FALSE = →';
   } else {
     leftInstruction = '← = FALSE';
-    rightInstruction = '→ = TRUE';
+    rightInstruction = 'TRUE = →';
   }
 
   show(`
