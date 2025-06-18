@@ -116,6 +116,7 @@ const CONFIG = {
     'feedback_manipulation_type', 'feedback_shown_fact_check_for',
     'q_own_ability_pre', 'q_others_ability_pre', 'q_rank_pre',
     'q_own_ability_post', 'q_others_ability_post', 'q_rank_post',
+    'age', 'gender', 'education', 'responded_randomly', 'searched_internet',
     'timestamp'
   ]
 };
@@ -136,6 +137,11 @@ const state = {
   q_own_ability_post: null,
   q_others_ability_post: null,
   q_rank_post: null,
+  age: null,
+  gender: null,
+  education: null,
+  responded_randomly: null,
+  searched_internet: null,
 };
 
 const stage = document.getElementById('stage');
@@ -302,7 +308,7 @@ async function introScreen(){
     state.participant = pid;
     state.sessionKey  = skey;
     state.group       = SESSION_KEYS[skey];
-    runBlock1();
+    runDemographics();
   };
 }
 
@@ -377,6 +383,96 @@ async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
   await sleep(CONFIG.isiDuration);
 }
 
+// ------------------- NEW: DEMOGRAPHICS -------------------
+async function runDemographics() {
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">Please enter your age:</p>
+            <input type="number" id="q_input" min="1" />
+            <button id="q_next">Next</button>
+        </div>
+    `);
+    await new Promise(resolve => {
+        document.getElementById('q_next').onclick = () => {
+            const val = document.getElementById('q_input').value;
+            if (val && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0) {
+                state.age = parseInt(val, 10);
+                resolve();
+            } else {
+                alert('Please enter a valid number for your age.');
+            }
+        };
+    });
+
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">Please select your gender:</p>
+            <select id="q_input">
+                <option value="" disabled selected>Select an option</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-binary/third gender</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+                <option value="other">Other (please specify)</option>
+            </select>
+            <input type="text" id="q_other_text" style="display:none;" placeholder="Please specify" />
+            <button id="q_next">Next</button>
+        </div>
+    `);
+    const genderSelect = document.getElementById('q_input');
+    const otherTextBox = document.getElementById('q_other_text');
+    genderSelect.onchange = () => {
+        if (genderSelect.value === 'other') {
+            otherTextBox.style.display = 'block';
+        } else {
+            otherTextBox.style.display = 'none';
+        }
+    };
+    await new Promise(resolve => {
+        document.getElementById('q_next').onclick = () => {
+            let val = genderSelect.value;
+            if (val === 'other') {
+                val = `Other: ${otherTextBox.value.trim()}`;
+            }
+            if (val && val !== '') {
+                state.gender = val;
+                resolve();
+            } else {
+                alert('Please select an option.');
+            }
+        };
+    });
+
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">What is your highest level of education?</p>
+            <select id="q_input">
+                <option value="" disabled selected>Select an option</option>
+                <option value="no-highschool">Did not complete highschool</option>
+                <option value="highschool">Year 12 or equivalent</option>
+                <option value="diploma">Diploma or equivalent</option>
+                <option value="bachelors">Bachelor's degree or equivalent</option>
+                <option value="postgrad">Post-graduate degree or equivalent (e.g., Master's or PhD)</option>
+            </select>
+            <button id="q_next">Next</button>
+        </div>
+    `);
+    await new Promise(resolve => {
+        document.getElementById('q_next').onclick = () => {
+            const val = document.getElementById('q_input').value;
+            if (val && val !== '') {
+                state.education = val;
+                resolve();
+            } else {
+                alert('Please select an option.');
+            }
+        };
+    });
+
+    runBlock1();
+}
+
+
 // ------------------- BLOCK 1 / 2 & QUESTIONNAIRE / FINISH -------------------
 async function runBlock1(){
   show(`<h2>Block 1: Judging Headlines</h2><p>Press SPACE to begin.</p>`);
@@ -429,13 +525,8 @@ async function runQuestionnaire(timing){
     }
     state[q.id + '_' + timing] = response;
   }
-  if (state.data.length > 0) {
-    const lastTrialData = state.data[state.data.length - 1];
-    lastTrialData[`q_own_ability_${timing}`] = state[`q_own_ability_${timing}`];
-    lastTrialData[`q_others_ability_${timing}`] = state[`q_others_ability_${timing}`];
-    lastTrialData[`q_rank_${timing}`] = state[`q_rank_${timing}`];
-  }
-  if (timing === 'pre') runBlock2(); else finishExperiment();
+  
+  if (timing === 'pre') runBlock2(); else runDebrief();
 }
 
 async function runBlock2(){
@@ -447,7 +538,52 @@ async function runBlock2(){
   runQuestionnaire('post');
 }
 
+// ------------------- NEW: DEBRIEF QUESTIONS -------------------
+async function runDebrief() {
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">Did you respond randomly at any point during the study?</p>
+            <p class="instructions">Note: Please be honest! You will get your payment regardless of your response.</p>
+            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
+        </div>
+    `);
+    state.responded_randomly = await new Promise(resolve => {
+        document.getElementById('yes_btn').onclick = () => resolve('Yes');
+        document.getElementById('no_btn').onclick = () => resolve('No');
+    });
+
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">Did you search the internet (via Google or otherwise) for any of the news headlines?</p>
+            <p class="instructions">Note: Please be honest! You will get your payment regardless of your response.</p>
+            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
+        </div>
+    `);
+    state.searched_internet = await new Promise(resolve => {
+        document.getElementById('yes_btn').onclick = () => resolve('Yes');
+        document.getElementById('no_btn').onclick = () => resolve('No');
+    });
+
+    finishExperiment();
+}
+
+
 function finishExperiment(){
+  // Add all non-trial data (questionnaires, demographics, etc.) to every row for easier analysis
+  state.data.forEach(row => {
+    row.q_own_ability_pre = state.q_own_ability_pre;
+    row.q_others_ability_pre = state.q_others_ability_pre;
+    row.q_rank_pre = state.q_rank_pre;
+    row.q_own_ability_post = state.q_own_ability_post;
+    row.q_others_ability_post = state.q_others_ability_post;
+    row.q_rank_post = state.q_rank_post;
+    row.age = state.age;
+    row.gender = state.gender;
+    row.education = state.education;
+    row.responded_randomly = state.responded_randomly;
+    row.searched_internet = state.searched_internet;
+  });
+
   const csv = toCSV(state.data);
   const fn  = `${CONFIG.experimentName}_${state.participant}_${state.group}_${Date.now()}.csv`;
   show('<h2>Uploading your data…</h2><p>Please wait.</p>');
