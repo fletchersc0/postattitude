@@ -1,1 +1,239 @@
-- test fact-check sheet
+─────────────────────────────────────────────────────────────────────────
+Statement: Chinese dissident  attack democrats on RNC
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump tax break under investigation
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Nun lauds Trump for being anti-abortion
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: RNC to stop using former presidents's likeness
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Jeff Falke joins over two-dozen formwer GOP members of congress to launch Republican for Biden
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Congress would not force Pentagon to change Confederate names of military bases
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: facts did not justify wiretap of trump aide
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: 7yearoldgirlisfatallyshotbymanwhowasreleasedfromjailhoursearlier
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: georgia removes barriers for puerto ricans
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Trump gets endoresement of NYC police union, warns no one will be safe in Biden's America
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Trump administration begins payroll tax deferral plan
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Trump dismisses 2 T.V.A members after outsourcing dispute
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: girls sue to block transgender athletes
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Biden eyes major foreign policy shifts if he wins
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump rejects request to fly pride flag
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Obama administration removed thousands of mailboxes
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Apple, Facebook and other major capmpanies denounce Trump visa restrictions
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Judge voids 50,000 absentee ballot requests in Lowa country
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: South Dakota turns down Trump's unemployment benfits boost
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: cons congressmen resigns
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump advisor says satanic pregnancies should miscarriage
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: House GOP's please to Republican National Committee for financial help go unanswered
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Trump's Labor Chief accused of intervening in Oracle pay bias case
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Trump says QAnon followers are people who love our country
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Progressive Didn't want Harris for V.P.
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: 30 million unemployed lose extra jobless benfits as talks between congress and White House
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: kushner's FBI interviews to be held for review
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Amid signs of trouble for trump
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Biden urged not to debate Trump
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: reps suggest planting trillion tree to fix climate
+Verdict  : True
+
+─────────────────────────────────────────────────────────────────────────
+Statement: maine house democrats vote to allow female genital mutilation.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump attacks buzz aldrin back- it was all fake news.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: nancy pelosi's son arrested for murder.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump trades texas for wall
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: rubio rape victims should be in custody if there is suspicion that they're planning abortion.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: assange- pardon in exchange for name of dem who leaked emails.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: a woman found dead on clinton estate.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: donald trump signs executive order allowing the hunting of bald eagles.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Courtroom shocked after black teen requested to be tried as a white man
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: journalist who filmed trump sobbing in garden still in custody.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump bringing back the draft.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: republican senator unveils plan to send teachers to marine bootcamp.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: wounded social justice warrior project
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: malia obama among 10 arrested.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: devos to strike more than 4.5 billion years of earth's history from school curriculum.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Pelosi arrested.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: the english department at a public university declared that proper english
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Dictionary change the definition of Racism
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump advisor denies moon landing
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: eric schneiderman helped sell sex slaves.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: 16 year old claim clinton is father
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: malia praises trump
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: Bill Clintons love child found dead.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump threatens to cancel israel visit.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: go buy Ivankas stuff!.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: BLM thug shoots himself.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: trump pays giuliani 130k to stay silent.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: eric trump- father's tax return is irrelevant.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: denzel washington supports trump.jpeg
+Verdict  : False
+
+─────────────────────────────────────────────────────────────────────────
+Statement: donald trump jr set record for most tinder left swipes.jpeg
+Verdict  : False
