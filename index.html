@@ -54,10 +54,22 @@
       height:6em;
       display:flex;align-items:center;justify-content:center;
     }
-    .statement-container, .feedback-container, .questionnaire-container {
+    .statement-container, .feedback-container, .questionnaire-container, .debrief-container {
       min-height:12em;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       padding: 1em;
+    }
+    .debrief-container {
+        text-align: left;
+        max-width: 680px;
+        margin: auto;
+        line-height: 1.6;
+    }
+    .debrief-container h2 { text-align: center; }
+    .debrief-container .button-container {
+        text-align: center;
+        width: 100%;
+        margin-top: 2em;
     }
     .stimulus-image {
       max-width: 420px;
@@ -105,6 +117,7 @@ const CONFIG = {
   experimentName         : 'News Confidence Task',
   csvFile                : 'statements_master.csv',
   dataPipeID             : 'qWHxwr6D720q',
+  prolificCompletionURL  : 'https://app.prolific.co/submissions/complete?cc=C13G9PW2',
   fallbackDownload       : true,
   fixationCrossDuration  : 500,
   statementTimeoutDuration: 15000,
@@ -206,14 +219,16 @@ function uploadCSV(filename,csv){
     body   : JSON.stringify({ experimentID: CONFIG.dataPipeID, filename: filename, data: csv })
   });
 }
-function downloadCSV(csv,fn){
-  const blob=new Blob([csv],{type:'text/csv'});
-  const url =URL.createObjectURL(blob);
-  const a   =document.createElement('a');
-  a.href=url;
-  a.download=fn;
-  a.click();
-  URL.revokeObjectURL(url);
+function downloadFile(content, filename, contentType) {
+    const blob = new Blob([content], { type: contentType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 // ------------------- STIMULUS LOADER -------------------
@@ -600,7 +615,7 @@ async function runBlock2(){
   runQuestionnaire('post');
 }
 
-// ------------------- NEW: DEBRIEF QUESTIONS -------------------
+// ------------------- DEBRIEF QUESTIONS -------------------
 async function runDebrief() {
     show(`
         <div class="questionnaire-container">
@@ -626,7 +641,59 @@ async function runDebrief() {
         document.getElementById('no_btn').onclick = () => resolve('No');
     });
 
-    finishExperiment();
+    showDebriefing();
+}
+
+// ------------------- DEBRIEFING PAGE -------------------
+function downloadFactChecks() {
+    let content = "Fact-Checks for All Headlines\n==============================\n\n";
+    state.stimuliPool.forEach(stim => {
+        content += `HEADLINE: ${stim.text}\n`;
+        content += `------------------------\n`;
+        content += `FACT-CHECK (if TRUE): ${stim.fact_check_true}\n`;
+        content += `FACT-CHECK (if FALSE): ${stim.fact_check_false}\n\n`;
+    });
+    downloadFile(content, 'fact-checks.txt', 'text/plain');
+}
+
+async function showDebriefing() {
+    const group = state.group;
+    let debriefFile = '';
+    if (group === 'Control') {
+        debriefFile = 'debrief_control.txt';
+    } else {
+        debriefFile = 'debrief_experimental.txt';
+    }
+
+    try {
+        const response = await fetch(debriefFile);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const debriefHtml = await response.text();
+
+        show(`
+            <div class="debrief-container">
+                ${debriefHtml}
+                <div class="button-container">
+                    <button id="download_btn">Download All Fact-Checks</button>
+                    <button id="finish_btn">Finish Experiment</button>
+                </div>
+            </div>
+        `);
+        document.getElementById('download_btn').onclick = downloadFactChecks;
+        document.getElementById('finish_btn').onclick = finishExperiment;
+
+    } catch (e) {
+        console.error('Failed to load debriefing file:', e);
+        show(`
+            <div class="questionnaire-container">
+                <p style="color:red;font-weight:bold;">Error: Could not load the debriefing information.</p>
+                <p>Please contact the researcher.</p>
+                <p>You can still complete the experiment to receive payment.</p>
+                <button id="finish_btn">Finish Experiment</button>
+            </div>
+        `);
+        document.getElementById('finish_btn').onclick = finishExperiment;
+    }
 }
 
 
@@ -652,17 +719,22 @@ function finishExperiment(){
 
   const csv = toCSV(state.data);
   const fn  = `${CONFIG.experimentName}_${state.participant}_${state.group}_${Date.now()}.csv`;
-  show('<h2>Uploading your data…</h2><p>Please wait.</p>');
+  show('<h2>Uploading your data…</h2><p>Please wait. This should not take long.</p>');
+  
   uploadCSV(fn,csv)
     .then(r=>{ if(!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`); return r.json(); })
-    .then(() => { show('<h2>Upload complete!</h2><p>Thank you for your participation. You may now close this window.</p>'); })
+    .then(async () => { 
+        show('<h2>Upload complete!</h2><p>Thank you for your participation. You will now be redirected back to Prolific.</p>'); 
+        await sleep(3000);
+        window.location.href = CONFIG.prolificCompletionURL;
+    })
     .catch(err=>{
       console.error('Upload failed:',err);
       if(CONFIG.fallbackDownload){
-        downloadCSV(csv,fn);
-        show('<h2>Network error – data downloaded locally.</h2><p>Please ensure the downloaded CSV file is sent to the researcher. You may now close this window.</p>');
+        downloadFile(csv, fn, 'text/csv');
+        show('<h2>Network error – data downloaded locally.</h2><p>Please ensure the downloaded CSV file is sent to the researcher. You may now close this window and return to Prolific.</p><p>Click here to return to Prolific: <a href="'+CONFIG.prolificCompletionURL+'">Complete Study</a></p>');
       }else{
-        show('<h2>Sorry – data could not be saved.</h2><p>Please screenshot this page and contact the researcher.</p>');
+        show('<h2>Sorry – data could not be saved.</h2><p>Please screenshot this page and contact the researcher. <br>Click here to return to Prolific: <a href="'+CONFIG.prolificCompletionURL+'">Complete Study</a></p>');
       }
     });
 }
