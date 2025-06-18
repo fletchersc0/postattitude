@@ -54,19 +54,19 @@
       height:6em;
       display:flex;align-items:center;justify-content:center;
     }
-    .statement-container, .feedback-container, .questionnaire-container, .debrief-container {
+    .statement-container, .feedback-container, .questionnaire-container, .debrief-container, .info-container {
       min-height:12em;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       padding: 1em;
     }
-    .debrief-container {
+    .debrief-container, .info-container {
         text-align: left;
         max-width: 680px;
         margin: auto;
         line-height: 1.6;
     }
-    .debrief-container h2 { text-align: center; }
-    .debrief-container .button-container {
+    .debrief-container h2, .info-container h2 { text-align: center; }
+    .debrief-container .button-container, .info-container .button-container {
         text-align: center;
         width: 100%;
         margin-top: 2em;
@@ -101,7 +101,7 @@
   </style>
 </head>
 <body>
-  <div id="stage">Loading experiment...</div>
+  <div id="stage">Loading...</div>
 
 <script>
 // --------------- SESSION‑KEY → GROUP MAP ---------------
@@ -316,6 +316,75 @@ function chooseFeedback_truthCompatible(stimulus, participantResponse, group){
     feedbackManipulationType : shouldAffirm ? 'Affirm' : 'Refute',
     feedbackShownFactCheckFor: showTrueFactCheck
   };
+}
+
+// ------------------- NEW: INFORMATION & CONSENT -------------------
+async function showInformationAndConsent() {
+    try {
+        const response = await fetch('participant_information.txt');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const infoHtml = await response.text();
+        
+        show(`
+            <div class="info-container">
+                ${infoHtml}
+                <div class="button-container">
+                    <a href="PIS.pdf" download="PIS.pdf" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><button>Download Information Sheet (PDF)</button></a>
+                    <button id="next_btn">Next</button>
+                </div>
+            </div>
+        `);
+
+    } catch (e) {
+        console.error('Failed to load participant information file:', e);
+        show(`<p style="color:red;font-weight:bold;">Error: Could not load the participant information sheet.</p><p>Please contact the researcher.</p>`);
+        return false; // Stop execution
+    }
+
+    await new Promise(resolve => { document.getElementById('next_btn').onclick = resolve; });
+
+    const showRejectionMessage = () => {
+        show(`
+            <div class="questionnaire-container">
+                <p>Thank you for your interest. As you do not meet the eligibility criteria or do not wish to consent, you cannot proceed with the study.</p>
+                <p>Please return your submission on the Prolific website. You may now close this window.</p>
+            </div>
+        `);
+    };
+
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">Are you over 18 years of age?</p>
+            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
+        </div>
+    `);
+    const isOver18 = await new Promise(resolve => {
+        document.getElementById('yes_btn').onclick = () => resolve(true);
+        document.getElementById('no_btn').onclick = () => resolve(false);
+    });
+
+    if (!isOver18) {
+        showRejectionMessage();
+        return false;
+    }
+
+    show(`
+        <div class="questionnaire-container">
+            <p class="question-text">Do you consent to participate in the study?</p>
+            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
+        </div>
+    `);
+    const hasConsented = await new Promise(resolve => {
+        document.getElementById('yes_btn').onclick = () => resolve(true);
+        document.getElementById('no_btn').onclick = () => resolve(false);
+    });
+
+    if (!hasConsented) {
+        showRejectionMessage();
+        return false;
+    }
+
+    return true; // Consent given
 }
 
 // ------------------- INTRO SCREEN -------------------
@@ -741,8 +810,16 @@ function finishExperiment(){
 // ------------------- LAUNCH -------------------
 (async()=>{
   try{
+    const consentGiven = await showInformationAndConsent();
+    if (!consentGiven) {
+        // Stop the script if consent was not given or an error occurred.
+        // The specific message is already shown by showInformationAndConsent().
+        return;
+    }
+
+    show('<h2>Loading experiment assets…</h2><p>This should only take a few seconds.</p>');
     await loadCSVStimuli();
-    show('<h2>Preloading images…</h2><p>This should only take a few seconds.</p>');
+    show('<h2>Preloading images…</h2><p>This may take a moment.</p>');
     await preloadImages(state.stimuliPool);
     introScreen();
   }catch(e){
