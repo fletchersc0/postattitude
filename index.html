@@ -9,10 +9,10 @@
   <style>
     /* ----- BASE STYLES ----- */
     :root {
-      --bg: #000;
-      --fg: #fff;
-      --input-bg: #1a1a1a;
-      --border-color:#444;
+      --bg: #f0f2f5;
+      --fg: #1c1e21;
+      --input-bg: #fff;
+      --border-color:#ccc;
       --dem-blue: #1877f2;
       --gop-red: #d93025;
     }
@@ -47,13 +47,12 @@
     }
     button{
       cursor:pointer;
-      background:#222;
+      background:#e4e6eb;
       font-weight: bold;
-      border: 1px solid var(--border-color);
+      border: 1px solid #ccd0d5;
     }
     button:hover{
-      background:#333;
-      border-color:#555;
+      background:#d8dbdf;
     }
     button:disabled {
       cursor: not-allowed;
@@ -69,9 +68,9 @@
       min-height:12em;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       padding: 1em;
-      background: var(--input-bg);
+      background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px #000a;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
       max-width: 580px;
       margin: auto;
     }
@@ -79,8 +78,6 @@
       text-align: left;
       max-width: 720px;
       line-height: 1.6;
-      background: var(--bg);
-      box-shadow: none;
     }
     .info-container h2, .debrief-container h2 { text-align: center; }
     .info-container .button-container, .debrief-container .button-container {
@@ -88,7 +85,7 @@
         width: 100%;
         margin-top: 2em;
     }
-    .instructions { font-size:1rem; color: #ccc; margin-top: 1em;}
+    .instructions { font-size:1rem; color: #65676b; margin-top: 1em;}
     .question-text { font-size:1.2rem; margin-bottom: 1em; font-weight: 600;}
     .loading { font-size:1.2rem; color: #aaa; }
 
@@ -102,7 +99,7 @@
         display: flex;
         justify-content: space-between;
         font-size: 0.9rem;
-        color: #ccc;
+        color: #65676b;
         margin-top: 0.5em;
     }
     input[type=range] {
@@ -110,7 +107,7 @@
         width: 100%;
         height: 8px;
         border-radius: 5px;
-        background: #444;
+        background: #ddd;
         outline: none;
         opacity: 0.7;
         -webkit-transition: .2s;
@@ -138,22 +135,22 @@
     /* ----- TWEET BANNER STYLES ----- */
     .tweet-card {
         max-width: 520px;
-        border: 1px solid var(--border-color);
+        border: 1px solid #ccd0d5;
         border-radius: 8px;
-        background: var(--input-bg);
+        background: #fff;
         text-align: left;
         margin-bottom: 1.5em;
     }
     .tweet-banner{
       display:flex;align-items:center;gap:8px;
-      padding:10px 14px;border-bottom:1px solid var(--border-color);
+      padding:10px 14px;border-bottom:1px solid #e2e8f0;
       font-size:15px;line-height:18px;
     }
     .tweet-banner.democrat { border-left: 6px solid var(--dem-blue); }
     .tweet-banner.republican { border-left: 6px solid var(--gop-red); }
     .avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eee;}
     .name{font-weight:700}
-    .handle{color:#888}
+    .handle{color:#536471}
     .badge{
       margin-left:auto;font-size:12px;font-weight:600;
       border-radius:4px;padding:3px 7px;color:#fff;
@@ -169,13 +166,13 @@
         margin-top: 1.5em;
     }
     .fact-check-table th, .fact-check-table td {
-        border: 1px solid var(--border-color);
+        border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
     }
-    .fact-check-table th { background-color: var(--input-bg); }
-    .fact-check-table .veracity-Accurate { color: #4caf50; font-weight: bold; }
-    .fact-check-table .veracity-Misinformation { color: #f44336; font-weight: bold; }
+    .fact-check-table th { background-color: #f2f2f2; }
+    .fact-check-table .veracity-Accurate { color: green; font-weight: bold; }
+    .fact-check-table .veracity-Misinformation { color: red; font-weight: bold; }
 
   </style>
 </head>
