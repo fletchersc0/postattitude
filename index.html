@@ -135,7 +135,7 @@
         cursor: pointer;
     }
 
-    /* ----- TWEET BANNER STYLES ----- */
+    /* ----- TWEET & BANNER STYLES ----- */
     .tweet-card {
         max-width: 520px;
         border: 1px solid #ccd0d5;
@@ -145,13 +145,26 @@
         margin-bottom: 1.5em;
         color: #1c1e21;
     }
-    .tweet-banner{
+    .tweet-banner, .target-banner {
       display:flex;align-items:center;gap:8px;
-      padding:10px 14px;border-bottom:1px solid #e2e8f0;
+      padding:10px 14px;
       font-size:15px;line-height:18px;
+      border-radius: 8px 8px 0 0;
+      color: #1c1e21;
+      background: #fff;
     }
-    .tweet-banner.democrat { border-left: 6px solid var(--dem-blue); }
-    .tweet-banner.republican { border-left: 6px solid var(--gop-red); }
+    .tweet-card .tweet-banner {
+      border-bottom:1px solid #e2e8f0;
+    }
+    .target-banner {
+      max-width: 520px;
+      width: 100%;
+      margin: 0 auto 1em auto;
+      border: 1px solid #ccd0d5;
+      border-radius: 8px;
+    }
+    .tweet-banner.democrat, .target-banner.democrat { border-left: 6px solid var(--dem-blue); }
+    .tweet-banner.republican, .target-banner.republican { border-left: 6px solid var(--gop-red); }
     .avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eee;}
     .name{font-weight:700}
     .handle{color:#536471}
@@ -162,21 +175,18 @@
     .badge.democrat { background: var(--dem-blue); }
     .badge.republican { background: var(--gop-red); }
     .tweet-body{ padding:14px; font-size:16px; line-height:22px; }
+    .claim-context {
+      font-style: italic;
+      color: #ccc;
+      margin-bottom: 1em;
+      max-width: 520px;
+    }
 
     /* ----- DEBRIEF STYLES ----- */
-    .fact-check-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1.5em;
+    .debrief-container {
+        padding: 2em;
+        background: var(--input-bg);
     }
-    .fact-check-table th, .fact-check-table td {
-        border: 1px solid var(--border-color);
-        padding: 8px;
-        text-align: left;
-    }
-    .fact-check-table th { background-color: var(--input-bg); }
-    .fact-check-table .veracity-Accurate { color: #4caf50; font-weight: bold; }
-    .fact-check-table .veracity-Misinformation { color: #f44336; font-weight: bold; }
 
   </style>
 </head>
@@ -195,16 +205,36 @@ const CONFIG = {
   minReadDuration        : 3000,
   itiDuration            : 300,
   numMainTrials          : 32,
-  democratSpeakers: [
-    { name: 'Rep. Jane Smith', handle: '@JaneSmith', avatar: 'avatars/dem_1.png' },
-    { name: 'Sen. David Chen', handle: '@DavidChen', avatar: 'avatars/dem_2.png' },
-    { name: 'Gov. Maria Garcia', handle: '@GovGarcia', avatar: 'avatars/dem_3.png' }
-  ],
-  republicanSpeakers: [
-    { name: 'Sen. John Doe', handle: '@JohnDoe', avatar: 'avatars/gop_1.png' },
-    { name: 'Rep. Bill First', handle: '@BillFirst', avatar: 'avatars/gop_2.png' },
-    { name: 'Gov. Susan White', handle: '@GovWhite', avatar: 'avatars/gop_3.png' }
-  ],
+  speakers: {
+      Democrat: {
+          male: [
+              { name: 'Sen. David Miller', handle: '@DavidMiller', avatar: 'avatars/dem_male_1.png' },
+              { name: 'Gov. Mark Thompson', handle: '@GovThompson', avatar: 'avatars/dem_male_2.png' },
+              { name: 'Rep. Chris Davis', handle: '@RepDavis', avatar: 'avatars/dem_male_3.png' },
+              { name: 'Sen. James White', handle: '@SenWhite', avatar: 'avatars/dem_male_4.png' }
+          ],
+          female: [
+              { name: 'Rep. Sarah Jones', handle: '@SarahJones', avatar: 'avatars/dem_female_1.png' },
+              { name: 'Gov. Maria Garcia', handle: '@GovGarcia', avatar: 'avatars/dem_female_2.png' },
+              { name: 'Sen. Emily Carter', handle: '@EmilyCarter', avatar: 'avatars/dem_female_3.png' },
+              { name: 'Rep. Linda Harris', handle: '@LindaHarris', avatar: 'avatars/dem_female_4.png' }
+          ]
+      },
+      Republican: {
+          male: [
+              { name: 'Sen. John Smith', handle: '@JohnSmith', avatar: 'avatars/gop_male_1.png' },
+              { name: 'Rep. Robert Brown', handle: '@BobBrown', avatar: 'avatars/gop_male_2.png' },
+              { name: 'Gov. Michael Wilson', handle: '@WilsonForGov', avatar: 'avatars/gop_male_3.png' },
+              { name: 'Sen. William First', handle: '@BillFirst', avatar: 'avatars/gop_male_4.png' }
+          ],
+          female: [
+              { name: 'Gov. Susan Moore', handle: '@GovMoore', avatar: 'avatars/gop_female_1.png' },
+              { name: 'Rep. Karen Taylor', handle: '@RepTaylor', avatar: 'avatars/gop_female_2.png' },
+              { name: 'Sen. Patricia Martin', handle: '@PatMartin', avatar: 'avatars/gop_female_3.png' },
+              { name: 'Gov. Jennifer Clark', handle: '@JenniferClark', avatar: 'avatars/gop_female_4.png' }
+          ]
+      }
+  },
   masterHeader : [
     'pid', 'prolific_session_id', 'age', 'gender', 'education',
     'partisanship_q1', 'partisanship_q2', 'partisanship_q3', 'partisanship_q4', 'partisanship_q5', 'partisanship_q6_orientation',
@@ -301,6 +331,19 @@ function createTweetHTML(party, avatarSrc, name, handle, statement) {
     `;
 }
 
+function createTargetBannerHTML(party, avatarSrc, name, handle) {
+    const partyClass = party.toLowerCase();
+    return `
+        <div class="target-banner ${partyClass}">
+            <img class="avatar" src="${avatarSrc}" alt="Avatar">
+            <span class="name">${name}</span>
+            <span class="handle">${handle}</span>
+            <span class="badge ${partyClass}">${party} ★</span>
+        </div>
+    `;
+}
+
+
 // ------------------- STIMULUS & TRIAL LIST PREPARATION -------------------
 async function loadAndPrepareStimuli() {
     // Load claims from CSV
@@ -345,21 +388,20 @@ function generateTrialList() {
 
     for (let i = 0; i < CONFIG.numMainTrials; i++) {
         const speakerParty = speakerGroups[i];
-        const speakerDetails = choice(speakerParty === 'Democrat' ? CONFIG.democratSpeakers : CONFIG.republicanSpeakers);
+        const speakerGender = choice(['male', 'female']);
+        const speakerDetails = choice(CONFIG.speakers[speakerParty][speakerGender]);
+
+        const targetParty = targetGroups[i];
+        const targetGender = choice(['male', 'female']);
+        const targetDetails = choice(CONFIG.speakers[targetParty][targetGender]);
 
         state.trialList.push({
             ...shuffledStimuli[i],
             SpeakerGroup: speakerParty,
-            TargetGroup: targetGroups[i],
-            SpeakerDetails: speakerDetails
+            SpeakerDetails: speakerDetails,
+            TargetGroup: targetParty,
+            TargetDetails: targetDetails
         });
-    }
-    // Simple constrained shuffle to avoid direct repeats of SpeakerGroup AND Veracity
-    for(let i=state.trialList.length-1; i>1; i--) {
-        const last = state.trialList[i-1];
-        if(state.trialList[i].SpeakerGroup === last.SpeakerGroup && state.trialList[i].Veracity === last.Veracity) {
-            [state.trialList[i], state.trialList[i-2]] = [state.trialList[i-2], state.trialList[i]];
-        }
     }
 }
 
@@ -461,29 +503,11 @@ async function runInstructionsAndPractice() {
             <p>In each trial, you will first see a social media post from a person. Their political party will be indicated by the colored banner.</p>
             <p>Please read the post carefully. After a few seconds, a "Next" button will appear.</p>
             <br>
-            <p><b>Example Banners:</b></p>
-            ${createTweetHTML('Democrat', 'avatars/dem_1.png', 'Rep. Jane Smith', '@JaneSmith', 'This is an example statement.')}
-            ${createTweetHTML('Republican', 'avatars/gop_1.png', 'Sen. John Doe', '@JohnDoe', 'This is another example statement.')}
-            <br>
-            <p>After reading the post, you will be asked to estimate how likely another person is to endorse the same statement, using a slider from 0 (Extremely Unlikely) to 100 (Extremely Likely).</p>
-            <div class="button-container"><button id="start_practice">Start Practice Trial</button></div>
+            <p>After reading the post, you will be shown a profile of another person and asked to estimate how likely they are to endorse the same statement, using a slider from 0 (Extremely Unlikely) to 100 (Extremely Likely).</p>
+            <div class="button-container"><button id="start_practice">Start</button></div>
         </div>
     `);
     await new Promise(resolve => { document.getElementById('start_practice').onclick = resolve; });
-
-    // Practice Trial
-    show(`
-        <div class="ui-container">
-            <p class="question-text">Regarding the claim: "A well-organized desk leads to a more productive day."</p>
-            <p>How likely is another person to endorse this claim?</p>
-            <div class="slider-container">
-                <input type="range" id="q_slider" min="0" max="100" value="50">
-                <div class="slider-labels"><span>Extremely Unlikely</span><span>Extremely Likely</span></div>
-            </div>
-            <button id="q_next">Next</button>
-        </div>
-    `);
-    await new Promise(resolve => { document.getElementById('q_next').onclick = resolve; });
 }
 
 async function runMainBlock() {
@@ -528,11 +552,11 @@ async function runSingleTrial(trial) {
     const rt_read = performance.now() - rtClock;
 
     // 3. Likelihood Estimate
-    const targetColorClass = trial.TargetGroup === 'Democrat' ? 'democrat' : 'republican';
     show(`
         <div class="ui-container">
-            <p class="instructions">Regarding the claim: "${trial.ClaimText}"</p>
-            <p class="question-text">How likely is a <b class="${targetColorClass}">${trial.TargetGroup}</b> to endorse this claim?</p>
+            <p class="question-text">How likely is this person to endorse the claim below?</p>
+            ${createTargetBannerHTML(trial.TargetGroup, trial.TargetDetails.avatar, trial.TargetDetails.name, trial.TargetDetails.handle)}
+            <p class="claim-context">Claim: "${trial.ClaimText}"</p>
             <div class="slider-container">
                 <input type="range" id="q_slider" min="0" max="100" value="50">
                 <div class="slider-labels"><span>Extremely Unlikely</span><span>Extremely Likely</span></div>
@@ -589,27 +613,33 @@ async function runPostTaskSurvey() {
     // Social Media & Attention Checks would follow a similar pattern...
 }
 
-function showDebriefAndFinish() {
-    let factCheckHTML = `
-        <table class="fact-check-table">
-            <tr><th>Claim</th><th>Actual Status</th></tr>
-    `;
-    state.stimuliPool.slice(0, CONFIG.numMainTrials).forEach(stim => {
-        factCheckHTML += `<tr><td>${stim.ClaimText}</td><td class="veracity-${stim.Veracity}">${stim.Veracity}</td></tr>`;
-    });
-    factCheckHTML += `</table>`;
+async function showDebriefAndFinish() {
+    try {
+        const response = await fetch('debrief.txt');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const debriefHtml = await response.text();
 
-    show(`
-        <div class="ui-container debrief-container">
-            <h2>Debriefing and Fact-Check</h2>
-            <p>Thank you for completing the main task. The study is investigating how we perceive beliefs of people from different political groups.</p>
-            <p>Below is a list of all the claims you saw and their factual status. It is important to us that all participants leave the study with accurate information.</p>
-            ${factCheckHTML}
-            <div class="button-container">
-                <button id="finish_btn">Finish and Save Data</button>
+        show(`
+            <div class="ui-container debrief-container">
+                ${debriefHtml}
+                <div class="button-container">
+                    <button id="finish_btn">Finish and Save Data</button>
+                </div>
             </div>
-        </div>
-    `);
+        `);
+    } catch (e) {
+        console.error('Failed to load debriefing file:', e);
+        show(`
+            <div class="ui-container debrief-container">
+                <h2>Debriefing Information</h2>
+                <p>Thank you for completing the main task. The study is investigating how we perceive beliefs of people from different political groups.</p>
+                 <p style="color:red;font-weight:bold;">Note: The detailed debriefing information could not be loaded, but your participation is complete.</p>
+                <div class="button-container">
+                    <button id="finish_btn">Finish and Save Data</button>
+                </div>
+            </div>
+        `);
+    }
     document.getElementById('finish_btn').onclick = finishExperiment;
 }
 
@@ -683,7 +713,7 @@ function finishExperiment() {
     await runInstructionsAndPractice();
     await runMainBlock();
     await runPostTaskSurvey();
-    showDebriefAndFinish();
+    await showDebriefAndFinish();
 
   }catch(e){
     console.error(e);
