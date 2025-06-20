@@ -386,14 +386,33 @@ function generateTrialList() {
 
     const shuffledStimuli = shuffle([...state.stimuliPool]).slice(0, CONFIG.numMainTrials);
 
+    // Create shuffled "decks" of people for each party to ensure less repetition
+    const demSpeakers = shuffle([...CONFIG.speakers.Democrat.male, ...CONFIG.speakers.Democrat.female]);
+    const repSpeakers = shuffle([...CONFIG.speakers.Republican.male, ...CONFIG.speakers.Republican.female]);
+    
+    // Create pools for speakers and targets to draw from
+    let speakerPool = { Democrat: [...demSpeakers], Republican: [...repSpeakers] };
+    let targetPool = { Democrat: [...demSpeakers], Republican: [...repSpeakers] };
+
     for (let i = 0; i < CONFIG.numMainTrials; i++) {
         const speakerParty = speakerGroups[i];
-        const speakerGender = choice(['male', 'female']);
-        const speakerDetails = choice(CONFIG.speakers[speakerParty][speakerGender]);
-
         const targetParty = targetGroups[i];
-        const targetGender = choice(['male', 'female']);
-        const targetDetails = choice(CONFIG.speakers[targetParty][targetGender]);
+
+        // Refill pools if they run empty to allow reuse
+        if (speakerPool[speakerParty].length === 0) speakerPool[speakerParty] = shuffle([...CONFIG.speakers[speakerParty].male, ...CONFIG.speakers[speakerParty].female]);
+        if (targetPool[targetParty].length === 0) targetPool[targetParty] = shuffle([...CONFIG.speakers[targetParty].male, ...CONFIG.speakers[targetParty].female]);
+        
+        let speakerDetails = speakerPool[speakerParty].pop();
+        let targetDetails = targetPool[targetParty].pop();
+
+        // --- Critical check: Ensure speaker and target are not the same person ---
+        while (speakerDetails.name === targetDetails.name) {
+            // If they match, put the target back and get a new one.
+            targetPool[targetParty].push(targetDetails);
+            shuffle(targetPool[targetParty]); // Shuffle again before picking
+            if (targetPool[targetParty].length === 0) targetPool[targetParty] = shuffle([...CONFIG.speakers[targetParty].male, ...CONFIG.speakers[targetParty].female]);
+            targetDetails = targetPool[targetParty].pop();
+        }
 
         state.trialList.push({
             ...shuffledStimuli[i],
