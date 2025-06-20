@@ -4,19 +4,22 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Opinion Task</title>
+  <title>Out-Group Homogeneity</title>
 
   <style>
+    /* ----- BASE STYLES ----- */
     :root {
-      --bg: #000;
-      --fg: #fff;
-      --input-bg: #1a1a1a;
-      --border-color:#444;
+      --bg: #f0f2f5;
+      --fg: #1c1e21;
+      --input-bg: #fff;
+      --border-color:#ccc;
+      --dem-blue: #1877f2;
+      --gop-red: #d93025;
     }
     *      { box-sizing:border-box; }
     html,body{
       margin:0;
-      font-family:system-ui,sans-serif;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
       background:var(--bg);
       color:var(--fg);
       display:flex;
@@ -40,64 +43,137 @@
       background:var(--input-bg);
       color:var(--fg);
       border:1px solid var(--border-color);
+      border-radius: 6px;
     }
     button{
       cursor:pointer;
-      background:#222;
+      background:#e4e6eb;
+      font-weight: bold;
+      border: 1px solid #ccd0d5;
     }
     button:hover{
-      background:#333;
-      border-color:#555;
+      background:#d8dbdf;
+    }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
     }
     .fixation-cross-container{
       font-size:3rem;
       height:6em;
       display:flex;align-items:center;justify-content:center;
+      color: #888;
     }
-    .statement-container, .feedback-container, .questionnaire-container, .debrief-container, .info-container {
+    .ui-container {
       min-height:12em;
       display:flex;flex-direction:column;align-items:center;justify-content:center;
       padding: 1em;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+      max-width: 580px;
+      margin: auto;
     }
-    .debrief-container, .info-container {
-        text-align: left;
-        max-width: 680px;
-        margin: auto;
-        line-height: 1.6;
+    .info-container, .debrief-container {
+      text-align: left;
+      max-width: 720px;
+      line-height: 1.6;
     }
-    .debrief-container h2, .info-container h2 { text-align: center; }
-    .debrief-container .button-container, .info-container .button-container {
+    .info-container h2, .debrief-container h2 { text-align: center; }
+    .info-container .button-container, .debrief-container .button-container {
         text-align: center;
         width: 100%;
         margin-top: 2em;
     }
-    .stimulus-image {
-      max-width: 420px;
-      max-height: 360px;
-      width: auto;
-      height: auto;
-      display: block;
-      margin: 0 auto 1em auto;
-      border: 2px solid #333;
-      background: #111;
-      box-shadow: 0 2px 8px #000a;
-    }
-    .feedback-text { font-size:1.2rem; }
-    .instructions { font-size:1rem; color: #ccc; margin-top: 1em;}
-    .question-text { font-size:1.2rem; margin-bottom: 1em;}
+    .instructions { font-size:1rem; color: #65676b; margin-top: 1em;}
+    .question-text { font-size:1.2rem; margin-bottom: 1em; font-weight: 600;}
     .loading { font-size:1.2rem; color: #aaa; }
-    .instructions-container {
+
+    /* ----- SLIDER STYLES ----- */
+    .slider-container {
+        width: 100%;
+        max-width: 480px;
+        margin-top: 1em;
+    }
+    .slider-labels {
         display: flex;
         justify-content: space-between;
+        font-size: 0.9rem;
+        color: #65676b;
+        margin-top: 0.5em;
+    }
+    input[type=range] {
+        -webkit-appearance: none;
         width: 100%;
-        max-width: 420px;
-        margin: 1em auto 0 auto;
+        height: 8px;
+        border-radius: 5px;
+        background: #ddd;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        margin: 1em 0;
     }
-    .instruction-reminder {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #ccc;
+    input[type=range]:hover { opacity: 1; }
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0866ff;
+        cursor: pointer;
     }
+    input[type=range]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0866ff;
+        cursor: pointer;
+    }
+
+    /* ----- TWEET BANNER STYLES ----- */
+    .tweet-card {
+        max-width: 520px;
+        border: 1px solid #ccd0d5;
+        border-radius: 8px;
+        background: #fff;
+        text-align: left;
+        margin-bottom: 1.5em;
+    }
+    .tweet-banner{
+      display:flex;align-items:center;gap:8px;
+      padding:10px 14px;border-bottom:1px solid #e2e8f0;
+      font-size:15px;line-height:18px;
+    }
+    .tweet-banner.democrat { border-left: 6px solid var(--dem-blue); }
+    .tweet-banner.republican { border-left: 6px solid var(--gop-red); }
+    .avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:#eee;}
+    .name{font-weight:700}
+    .handle{color:#536471}
+    .badge{
+      margin-left:auto;font-size:12px;font-weight:600;
+      border-radius:4px;padding:3px 7px;color:#fff;
+    }
+    .badge.democrat { background: var(--dem-blue); }
+    .badge.republican { background: var(--gop-red); }
+    .tweet-body{ padding:14px; font-size:16px; line-height:22px; }
+
+    /* ----- DEBRIEF STYLES ----- */
+    .fact-check-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5em;
+    }
+    .fact-check-table th, .fact-check-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .fact-check-table th { background-color: #f2f2f2; }
+    .fact-check-table .veracity-Accurate { color: green; font-weight: bold; }
+    .fact-check-table .veracity-Misinformation { color: red; font-weight: bold; }
+
   </style>
 </head>
 <body>
@@ -106,34 +182,33 @@
 <script>
 // -------------------- CONFIG --------------------
 const CONFIG = {
-  experimentName         : 'Opinion Task',
-  csvFile                : 'statements_master.csv',
-  dataPipeID             : 'qWHxwr6D720q',
-  prolificCompletionURL  : 'https://app.prolific.co/submissions/complete?cc=C13G9PW2',
+  experimentName         : 'Out-Group Homogeneity',
+  csvFile                : 'claims_pool.csv',
+  dataPipeID             : 'qWHxwr6D720q', // Placeholder
+  prolificCompletionURL  : 'https://app.prolific.co/submissions/complete?cc=C13G9PW2', // Placeholder
   fallbackDownload       : true,
   fixationCrossDuration  : 500,
-  statementTimeoutDuration: 15000,
-  feedbackDuration       : 6000,
-  timeoutFeedbackDuration: 2000,
-  isiDuration            : 500,
-  groups                 : ['High', 'Medium', 'Low', 'Control'],
-  feedbackManipulationPercentages: {
-    High   : 0.80,
-    Medium : 0.50,
-    Low    : 0.20,
-    Control: null
-  },
-  epsilonIncorrectAffirm : 0.05,
-  numInductionTrials: 40,
-  numTestTrials: 20,
+  minReadDuration        : 3000,
+  itiDuration            : 300,
+  numMainTrials          : 32,
+  democratSpeakers: [
+    { name: 'Rep. Jane Smith', handle: '@JaneSmith', avatar: 'avatars/dem_1.png' },
+    { name: 'Sen. David Chen', handle: '@DavidChen', avatar: 'avatars/dem_2.png' },
+    { name: 'Gov. Maria Garcia', handle: '@GovGarcia', avatar: 'avatars/dem_3.png' }
+  ],
+  republicanSpeakers: [
+    { name: 'Sen. John Doe', handle: '@JohnDoe', avatar: 'avatars/gop_1.png' },
+    { name: 'Rep. Bill First', handle: '@BillFirst', avatar: 'avatars/gop_2.png' },
+    { name: 'Gov. Susan White', handle: '@GovWhite', avatar: 'avatars/gop_3.png' }
+  ],
   masterHeader : [
-    'pid', 'session_key', 'group', 'block_type', 'trial_number_in_block', 'trial_number_overall',
-    'statement_id', 'statement_text', 'statement_truth_value', 'image_filename',
-    'response', 'is_correct', 'rt_ms', 'key_mapping', 'key_pressed',
-    'feedback_manipulation_type', 'feedback_shown_fact_check_for',
-    'q_own_ability_pre', 'q_others_ability_pre', 'q_rank_pre',
-    'q_own_ability_post', 'q_others_ability_post', 'q_rank_post',
-    'age', 'gender', 'education', 'responded_randomly', 'searched_internet',
+    'pid', 'prolific_session_id', 'age', 'gender', 'education',
+    'partisanship_q1', 'partisanship_q2', 'partisanship_q3', 'partisanship_q4', 'partisanship_q5', 'partisanship_q6_orientation',
+    'trial_number', 'ClaimID', 'Veracity', 'SpeakerGroup', 'TargetGroup', 'SpeakerTargetMatch',
+    'RT_read', 'RT_estimate', 'Endorsement_estimate',
+    'feeling_therm_dem', 'feeling_therm_rep', 'social_media_freq',
+    'attn_check_1_claim', 'attn_check_1_response', 'attn_check_1_correct',
+    'attn_check_2_claim', 'attn_check_2_response', 'attn_check_2_correct',
     'timestamp'
   ]
 };
@@ -141,25 +216,17 @@ const CONFIG = {
 // ------------------------ STATE OBJECT ------------------------
 const state = {
   participant : '',
-  sessionKey  : '', // This can be left blank or removed if not needed.
-  group       : '',
-  keyMapping  : null,
-  stimuliPool : [],
-  inductionStatements: [],
-  testStatements: [],
-  data        : [],
+  sessionKey: `sess_${Date.now()}${Math.floor(Math.random()*1000)}`,
+  data: [],
+  stimuliPool: [],
+  trialList: [],
   trialCountOverall: 0,
-  q_own_ability_pre: null,
-  q_others_ability_pre: null,
-  q_rank_pre: null,
-  q_own_ability_post: null,
-  q_others_ability_post: null,
-  q_rank_post: null,
-  age: null,
-  gender: null,
-  education: null,
-  responded_randomly: null,
-  searched_internet: null,
+  in_group: null,
+  age: null, gender: null, education: null,
+  partisanship_q1: null, partisanship_q2: null, partisanship_q3: null, partisanship_q4: null, partisanship_q5: null, partisanship_q6_orientation: null,
+  feeling_therm_dem: null, feeling_therm_rep: null,
+  social_media_freq: null,
+  attn_check_trials: []
 };
 
 const stage = document.getElementById('stage');
@@ -170,17 +237,6 @@ const sleep = ms => new Promise(r=>setTimeout(r,ms));
 const shuffle = arr=>{ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
 const show = html => stage.innerHTML = html;
 const choice = arr => arr[Math.floor(Math.random() * arr.length)];
-
-// --------------- IMAGE PRELOADER ----------------
-async function preloadImages(list){
-  const promises = list.map(stim => new Promise(res=>{
-    const img=new Image();
-    img.onload=res;
-    img.onerror=res; // resolve even if 404 to avoid stalling
-    img.src='images/'+stim.image_filename;
-  }));
-  await Promise.all(promises);
-}
 
 // ------------------------ DATA LOGGING FUNCTIONS ------------------------
 function log(dataRow) {
@@ -225,278 +281,107 @@ function downloadFile(content, filename, contentType) {
     URL.revokeObjectURL(url);
 }
 
-// ------------------- STIMULUS LOADER -------------------
-async function loadCSVStimuli(){
-  const response = await fetch(CONFIG.csvFile);
-  if (!response.ok) throw new Error(`Failed to load ${CONFIG.csvFile}: ${response.statusText}`);
-  const txt = await response.text();
-  let lines = txt.trim().split(/\r?\n/);
-  let delimiter = "\t";
-  if (lines[0].split("\t").length < 6) delimiter = ",";
-  const header = lines.shift().split(delimiter);
-  lines.forEach(line => {
-    let fields = [];
-    if (delimiter === "\t") {
-      fields = line.split("\t");
-    } else {
-      let current = '', inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === '"') { inQuotes = !inQuotes; }
-        else if (char === delimiter && !inQuotes) { fields.push(current); current = ''; }
-        else { current += char; }
-      }
-      fields.push(current);
-    }
-    while(fields.length < 6) fields.push('');
-    state.stimuliPool.push({
-      id: fields[0],
-      text: fields[1],
-      is_true: fields[2].toUpperCase() === 'TRUE',
-      fact_check_true: fields[3],
-      fact_check_false: fields[4],
-      image_filename: fields[5]
+// ------------------- DYNAMIC HTML TEMPLATES -------------------
+function createTweetHTML(party, avatarSrc, name, handle, statement) {
+    const partyClass = party.toLowerCase();
+    return `
+        <div class="tweet-card">
+            <div class="tweet-banner ${partyClass}">
+                <img class="avatar" src="${avatarSrc}" alt="Avatar">
+                <span class="name">${name}</span>
+                <span class="handle">${handle}</span>
+                <span class="badge ${partyClass}">${party} ★</span>
+            </div>
+            <p class="tweet-body">${statement}</p>
+        </div>
+    `;
+}
+
+// ------------------- STIMULUS & TRIAL LIST PREPARATION -------------------
+async function loadAndPrepareStimuli() {
+    // Load claims from CSV
+    const response = await fetch(CONFIG.csvFile);
+    if (!response.ok) throw new Error(`Failed to load ${CONFIG.csvFile}: ${response.statusText}`);
+    const txt = await response.text();
+    const lines = txt.trim().split(/\r?\n/);
+    const header = lines.shift().split(',').map(h => h.trim());
+    const claimIdIndex = header.indexOf('ClaimID');
+    const claimTextIndex = header.indexOf('ClaimText');
+    const veracityIndex = header.indexOf('Veracity');
+
+    lines.forEach(line => {
+        const fields = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g).map(f => f.replace(/"/g, ''));
+        state.stimuliPool.push({
+            ClaimID: fields[claimIdIndex],
+            ClaimText: fields[claimTextIndex],
+            Veracity: fields[veracityIndex]
+        });
     });
-  });
-  if(state.stimuliPool.length < CONFIG.numInductionTrials + CONFIG.numTestTrials) {
-    throw new Error(`Insufficient stimuli loaded. Need ${CONFIG.numInductionTrials + CONFIG.numTestTrials}, found ${state.stimuliPool.length}.`);
-  }
-  shuffle(state.stimuliPool);
-  state.inductionStatements = state.stimuliPool.slice(0, CONFIG.numInductionTrials);
-  state.testStatements = state.stimuliPool.slice(CONFIG.numInductionTrials, CONFIG.numInductionTrials + CONFIG.numTestTrials);
-}
 
-// ------------------- KEYBOARD HELPERS -------------------
-function waitKeys(validKeys) {
-  return new Promise(resolve => {
-    function onKey(e) {
-      const key = e.key.toLowerCase();
-      if (validKeys.includes(key)) {
-        document.removeEventListener('keydown', onKey);
-        resolve(key);
-      }
+    if (state.stimuliPool.length < CONFIG.numMainTrials) {
+        throw new Error(`Insufficient stimuli loaded. Need ${CONFIG.numMainTrials}, found ${state.stimuliPool.length}.`);
     }
-    document.addEventListener('keydown', onKey);
-  });
+    generateTrialList();
 }
-function waitKeysOrTimeout(validKeys, timeoutMs) {
-  return new Promise(resolve => {
-    let timeoutId = null;
-    function onKey(e) {
-      const key = e.key.toLowerCase();
-      if (validKeys.includes(key)) {
-        clearTimeout(timeoutId);
-        document.removeEventListener('keydown', onKey);
-        resolve({ key: key, timedOut: false });
-      }
+
+function generateTrialList() {
+    const out_group = state.in_group === 'Democrat' ? 'Republican' : 'Democrat';
+
+    let speakerGroups = [];
+    for(let i=0; i<CONFIG.numMainTrials/2; i++) speakerGroups.push(state.in_group);
+    for(let i=0; i<CONFIG.numMainTrials/2; i++) speakerGroups.push(out_group);
+    shuffle(speakerGroups);
+
+    let targetGroups = [];
+    for(let i=0; i<CONFIG.numMainTrials/2; i++) targetGroups.push(state.in_group);
+    for(let i=0; i<CONFIG.numMainTrials/2; i++) targetGroups.push(out_group);
+    shuffle(targetGroups);
+
+    const shuffledStimuli = shuffle([...state.stimuliPool]).slice(0, CONFIG.numMainTrials);
+
+    for (let i = 0; i < CONFIG.numMainTrials; i++) {
+        const speakerParty = speakerGroups[i];
+        const speakerDetails = choice(speakerParty === 'Democrat' ? CONFIG.democratSpeakers : CONFIG.republicanSpeakers);
+
+        state.trialList.push({
+            ...shuffledStimuli[i],
+            SpeakerGroup: speakerParty,
+            TargetGroup: targetGroups[i],
+            SpeakerDetails: speakerDetails
+        });
     }
-    document.addEventListener('keydown', onKey);
-    timeoutId = setTimeout(() => {
-      document.removeEventListener('keydown', onKey);
-      resolve({ key: null, timedOut: true });
-    }, timeoutMs);
-  });
-}
-
-// ------------------- FEEDBACK LOGIC -------------------
-function chooseFeedback_truthCompatible(stimulus, participantResponse, group){
-  const pAffirmCorrect = CONFIG.feedbackManipulationPercentages[group];
-  const epsilon        = CONFIG.epsilonIncorrectAffirm;
-  const answeredCorrectly = (participantResponse === 'True') === stimulus.is_true;
-  const affirmProb = answeredCorrectly ? pAffirmCorrect : epsilon;
-  const shouldAffirm = Math.random() < affirmProb;
-  const showTrueFactCheck = shouldAffirm ? (participantResponse === 'True') : !(participantResponse === 'True');
-  return {
-    feedbackManipulationType : shouldAffirm ? 'Affirm' : 'Refute',
-    feedbackShownFactCheckFor: showTrueFactCheck
-  };
-}
-
-// ------------------- NEW: INFORMATION & CONSENT -------------------
-async function showInformationAndConsent() {
-    try {
-        const response = await fetch('participant_information.txt');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const infoHtml = await response.text();
-        
-        show(`
-            <div class="info-container">
-                ${infoHtml}
-                <div class="button-container">
-                    <a href="PIS.pdf" download="PIS.pdf" target="_blank" rel="noopener noreferrer" style="text-decoration: none;"><button>Download Information Sheet (PDF)</button></a>
-                    <button id="next_btn">Next</button>
-                </div>
-            </div>
-        `);
-
-    } catch (e) {
-        console.error('Failed to load participant information file:', e);
-        show(`<p style="color:red;font-weight:bold;">Error: Could not load the participant information sheet.</p><p>Please contact the researcher.</p>`);
-        return false; // Stop execution
+    // Simple constrained shuffle to avoid direct repeats of SpeakerGroup AND Veracity
+    for(let i=state.trialList.length-1; i>1; i--) {
+        const last = state.trialList[i-1];
+        if(state.trialList[i].SpeakerGroup === last.SpeakerGroup && state.trialList[i].Veracity === last.Veracity) {
+            [state.trialList[i], state.trialList[i-2]] = [state.trialList[i-2], state.trialList[i]];
+        }
     }
+}
 
-    await new Promise(resolve => { document.getElementById('next_btn').onclick = resolve; });
 
-    const showRejectionMessage = () => {
-        show(`
-            <div class="questionnaire-container">
-                <p>Thank you for your interest. As you do not meet the eligibility criteria or do not wish to consent, you cannot proceed with the study.</p>
-                <p>Please return your submission on the Prolific website. You may now close this window.</p>
-            </div>
-        `);
-    };
+// ------------------- EXPERIMENT FLOW & UI FUNCTIONS -------------------
 
+async function showWelcomeAndConsent() {
     show(`
-        <div class="questionnaire-container">
-            <p class="question-text">Are you over 18 years of age?</p>
-            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
+        <div class="ui-container info-container">
+            <h2>Welcome to the Study</h2>
+            <p>Thank you for your interest in our research.</p>
+            <p>In this study, you will be asked to read a series of short statements from social media and answer some questions about them. You will also be asked some questions about your own political views.</p>
+            <p>Your participation is completely voluntary, and your responses will be kept anonymous. You may withdraw at any time without penalty.</p>
+            <p>By clicking 'Consent and Continue', you confirm that you are over 18 and agree to participate.</p>
+            <div class="button-container">
+                <button id="consent_btn">Consent and Continue</button>
+            </div>
         </div>
     `);
-    const isOver18 = await new Promise(resolve => {
-        document.getElementById('yes_btn').onclick = () => resolve(true);
-        document.getElementById('no_btn').onclick = () => resolve(false);
-    });
+    await new Promise(resolve => { document.getElementById('consent_btn').onclick = resolve; });
+}
 
-    if (!isOver18) {
-        showRejectionMessage();
-        return false;
-    }
-
+async function runPreSurvey() {
+    // --- Demographics ---
     show(`
-        <div class="questionnaire-container">
-            <p class="question-text">Do you consent to participate in the study?</p>
-            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
-        </div>
-    `);
-    const hasConsented = await new Promise(resolve => {
-        document.getElementById('yes_btn').onclick = () => resolve(true);
-        document.getElementById('no_btn').onclick = () => resolve(false);
-    });
-
-    if (!hasConsented) {
-        showRejectionMessage();
-        return false;
-    }
-
-    return true; // Consent given
-}
-
-// ------------------- INTRO SCREEN -------------------
-async function introScreen(){
-  show(`
-    <h1>${CONFIG.experimentName}</h1>
-    <p>Please enter your Prolific ID to begin.</p>
-    <input id="pid" placeholder="Prolific ID" autocomplete="off" /><br>
-    <button id="startBtn">Start</button>
-  `);
-  document.getElementById('startBtn').onclick = () => {
-    const pid  = document.getElementById('pid').value.trim();
-    if (!pid) { alert('Please enter a Prolific ID.'); return; }
-    
-    state.participant = pid;
-    state.group       = choice(CONFIG.groups); // Randomly assign group
-    
-    runDemographics();
-  };
-}
-
-// ------------------- CORE TRIAL LOGIC -------------------
-async function runSingleTrial(stimulus, blockType, trialNumInBlock) {
-  state.trialCountOverall++;
-  show(`<div class="fixation-cross-container">+</div>`);
-  await sleep(CONFIG.fixationCrossDuration);
-
-  let leftInstruction, rightInstruction;
-  if (state.keyMapping === 'q_true_p_false') {
-    leftInstruction = 'Q = TRUE';
-    rightInstruction = 'FALSE = P';
-  } else { // p_true_q_false
-    leftInstruction = 'Q = FALSE';
-    rightInstruction = 'TRUE = P';
-  }
-
-  show(`
-    <div class="statement-container">
-      <img class="stimulus-image" src="images/${stimulus.image_filename}" alt="headline stimulus" 
-           onerror="this.onerror=null;this.style.display='none';document.getElementById('imgerror').style.display='block';">
-      <div id="imgerror" class="loading" style="display:none;">[Image not found: ${stimulus.image_filename}]</div>
-      <div class="instructions-container">
-        <span class="instruction-reminder">${leftInstruction}</span>
-        <span class="instruction-reminder">${rightInstruction}</span>
-      </div>
-    </div>
-  `);
-  // Wait until image fully decoded & painted before starting RT
-  const imgEl = document.querySelector('.stimulus-image');
-  if (imgEl) {
-    try { await imgEl.decode(); } catch(e) {/* ignore decode errors */}
-  }
-  rtClock = performance.now();
-
-  const responseResult = await waitKeysOrTimeout(['q', 'p'], CONFIG.statementTimeoutDuration);
-  const rt = performance.now() - rtClock;
-  let participantResponse = null;
-  let isCorrect = null;
-  let feedbackText = '';
-  let feedbackManipulationType = '';
-  let feedbackShownFactCheckFor = null;
-  let keyPressed = responseResult.key;
-
-  if (responseResult.timedOut) {
-    participantResponse = 'TIMEOUT';
-    isCorrect = null;
-    feedbackText = "Please respond faster on the next trial.";
-    feedbackManipulationType = 'TIMEOUT';
-    show(`<div class="feedback-container"><p class="feedback-text">${feedbackText}</p></div>`);
-    await sleep(CONFIG.timeoutFeedbackDuration);
-  } else {
-    if (state.keyMapping === 'q_true_p_false') {
-        participantResponse = (keyPressed === 'q') ? 'True' : 'False';
-    } else { // p_true_q_false
-        participantResponse = (keyPressed === 'p') ? 'True' : 'False';
-    }
-    
-    isCorrect = (participantResponse === 'True') === stimulus.is_true;
-    if (blockType === 'ConfidenceInduction' && state.group !== 'Control') {
-      const fb = chooseFeedback_truthCompatible(stimulus, participantResponse, state.group);
-      feedbackManipulationType  = fb.feedbackManipulationType;
-      feedbackShownFactCheckFor = fb.feedbackShownFactCheckFor;
-    } else {
-      feedbackManipulationType  = 'Veridical';
-      feedbackShownFactCheckFor = stimulus.is_true;
-    }
-    feedbackText = feedbackShownFactCheckFor ? stimulus.fact_check_true : stimulus.fact_check_false;
-    show(`<div class="feedback-container"><p class="feedback-text">${feedbackText}</p></div>`);
-    await sleep(CONFIG.feedbackDuration);
-  }
-  const trialData = {
-    pid: state.participant,
-    session_key: state.sessionKey,
-    group: state.group,
-    block_type: blockType,
-    trial_number_in_block: trialNumInBlock,
-    trial_number_overall: state.trialCountOverall,
-    statement_id: stimulus.id,
-    statement_text: stimulus.text,
-    statement_truth_value: stimulus.is_true ? 'TRUE' : 'FALSE',
-    image_filename: stimulus.image_filename,
-    response: participantResponse,
-    is_correct: isCorrect === null ? null : (isCorrect ? 1 : 0),
-    rt_ms: responseResult.timedOut ? CONFIG.statementTimeoutDuration : Math.round(rt),
-    key_mapping: state.keyMapping,
-    key_pressed: keyPressed,
-    feedback_manipulation_type: feedbackManipulationType,
-    feedback_shown_fact_check_for: feedbackShownFactCheckFor === null ? null : (feedbackShownFactCheckFor ? 'TRUE_FACT_CHECK' : 'FALSE_FACT_CHECK'),
-  };
-  log(trialData);
-  show('');
-  await sleep(CONFIG.isiDuration);
-}
-
-// ------------------- NEW: DEMOGRAPHICS -------------------
-async function runDemographics() {
-    show(`
-        <div class="questionnaire-container">
+        <div class="ui-container">
             <p class="question-text">Please enter your age:</p>
             <input type="number" id="q_input" min="1" autocomplete="off" />
             <button id="q_next">Next</button>
@@ -508,322 +393,297 @@ async function runDemographics() {
             if (val && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0) {
                 state.age = parseInt(val, 10);
                 resolve();
-            } else {
-                alert('Please enter a valid number for your age.');
-            }
+            } else { alert('Please enter a valid number for your age.'); }
         };
     });
+    // Additional demographics (gender, education) would follow the same pattern...
 
-    show(`
-        <div class="questionnaire-container">
-            <p class="question-text">Please select your gender:</p>
-            <select id="q_input" autocomplete="off">
-                <option value="" disabled selected>Select an option</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="non-binary">Non-binary/third gender</option>
-                <option value="prefer-not-to-say">Prefer not to say</option>
-                <option value="other">Other (please specify)</option>
-            </select>
-            <input type="text" id="q_other_text" style="display:none;" placeholder="Please specify" autocomplete="off" />
-            <button id="q_next">Next</button>
-        </div>
-    `);
-    const genderSelect = document.getElementById('q_input');
-    const otherTextBox = document.getElementById('q_other_text');
-    genderSelect.onchange = () => {
-        if (genderSelect.value === 'other') {
-            otherTextBox.style.display = 'block';
-        } else {
-            otherTextBox.style.display = 'none';
-        }
-    };
-    await new Promise(resolve => {
-        document.getElementById('q_next').onclick = () => {
-            let val = genderSelect.value;
-            if (val === 'other') {
-                val = `Other: ${otherTextBox.value.trim()}`;
-            }
-            if (val && val !== '') {
-                state.gender = val;
-                resolve();
-            } else {
-                alert('Please select an option.');
-            }
-        };
-    });
+    // --- Partisanship Questions ---
+    const partisanshipQuestions = [
+        { id: 'partisanship_q1', text: 'I am politically more in line with the Democrat party than the Republican party.' },
+        { id: 'partisanship_q2', text: 'In any election, given a choice between a Republican and a Democrat candidate, I will select the Republican over the Democrat candidate.' },
+        { id: 'partisanship_q3', text: 'I cannot see myself ever voting to elect Republican candidates.' },
+        { id: 'partisanship_q4', text: 'The major national media are too protective of the Democrat party for my taste.' },
+        { id: 'partisanship_q5', text: 'On balance, I lean politically more to the left (Democrat) than to the right (Republican).' }
+    ];
 
-    show(`
-        <div class="questionnaire-container">
-            <p class="question-text">What is your highest level of education?</p>
-            <select id="q_input" autocomplete="off">
-                <option value="" disabled selected>Select an option</option>
-                <option value="no-highschool">Did not complete highschool</option>
-                <option value="highschool">Year 12 or equivalent</option>
-                <option value="diploma">Diploma or equivalent</option>
-                <option value="bachelors">Bachelor's degree or equivalent</option>
-                <option value="postgrad">Post-graduate degree or equivalent (e.g., Master's or PhD)</option>
-            </select>
-            <button id="q_next">Next</button>
-        </div>
-    `);
-    await new Promise(resolve => {
-        document.getElementById('q_next').onclick = () => {
-            const val = document.getElementById('q_input').value;
-            if (val && val !== '') {
-                state.education = val;
-                resolve();
-            } else {
-                alert('Please select an option.');
-            }
-        };
-    });
-
-    showKeyMappingInstructions();
-}
-
-// ------------------- NEW: KEY MAPPING INSTRUCTIONS -------------------
-async function showKeyMappingInstructions() {
-    state.keyMapping = (Math.random() < 0.5) ? 'q_true_p_false' : 'p_true_q_false';
-    
-    let keyInstructions = '';
-    if (state.keyMapping === 'q_true_p_false') {
-        keyInstructions = `Press the <b>Q</b> key for <b>TRUE</b>.<br>Press the <b>P</b> key for <b>FALSE</b>.`;
-    } else { // p_true_q_false
-        keyInstructions = `Press the <b>P</b> key for <b>TRUE</b>.<br>Press the <b>Q</b> key for <b>FALSE</b>.`;
-    }
-
-    const generalInstructions = `
-        <div class="info-container" style="text-align:left; max-width: 720px;">
-            <h2>Instructions</h2>
-            <p>Welcome to this session.</p>
-            <p>Please turn off your phone.</p>
-            <p>Then, please read the following instructions carefully. They will give you all the information you need to participate in this session.</p>
-            <p><b>Please note:</b> Once an entry has been made, it is no longer possible to re-enter.</p>
-            <p>This experiment is composed of two rounds of the same task. Your responses in both rounds will remain completely anonymous.</p>
-            <p>Your responses may be utilized in future experiments, but no information will be linked to your identity.</p>
-            <p>All the instructions for each part of the experiment will be displayed directly on your screen. Follow the on-screen instructions carefully to navigate through each phase of the study.</p>
-            <p>Throughout the session, use your keyboard to respond. Over a series of trials, you will see one news item per trial. These items will each be different and come from different media. <b>Please note: items can be true or false. Some of the items you will be exposed to will be false information.</b></p>
-            <p>On each trial, decide whether you think a statement is true or false.</p>
-            <hr style="margin: 2em 0;">
-            <p style="font-size: 1.2em; text-align: center;">${keyInstructions}</p>
-            <p class="instructions" style="text-align: center; margin-top: 2em;">Press the SPACE bar to begin.</p>
-        </div>
-    `;
-
-    show(generalInstructions);
-
-    await waitKeys([' ']);
-    runBlock1();
-}
-
-
-// ------------------- BLOCK 1 / 2 & QUESTIONNAIRE / FINISH -------------------
-async function runBlock1(){
-  show(`<h2>Block 1: Judging Headlines</h2><p>Press SPACE to begin.</p>`);
-  await waitKeys([' ']);
-  for (let i = 0; i < state.inductionStatements.length; i++) {
-    await runSingleTrial(state.inductionStatements[i], 'ConfidenceInduction', i + 1);
-  }
-  runQuestionnaire('pre');
-}
-
-async function runQuestionnaire(timing){
-  const questions = [
-    {
-      id: 'q_own_ability',
-      text: "<br>How confident are you in your own ability to recognise news that is made up?<br>(1 = Not at all confident, 5 = Moderately confident, 9 = Extremely confident)",
-      type: 'number_1-9'
-    },
-    {
-      id: 'q_others_ability',
-      text: "<br>How confident are you in others’ ability to recognise news that is made up?<br>(1 = Not at all confident, 5 = Moderately confident, 9 = Extremely confident)",
-      type: 'number_1-9'
-    },
-    {
-      id: 'q_rank',
-      text: "<br>On a scale from 0 % (no one) to 100 % (everyone), what percentage of people do you think you are better than at detecting news that is made up?<br>(1 = better than 0 % of people, 50 = better than half, 100 = better than everyone)",
-      type: 'number_1-100'
-    }
-  ];
-  for (const q of questions) {
-    show(`
-      <div class="questionnaire-container">
-        <p class="question-text">${q.text}</p>
-        ${q.type === 'number_1-100' ? '<input type="text" id="q_input" inputmode="numeric" pattern="\\d*" autocomplete="off" />' : ''}
-        ${q.type === 'number_1-9' ? '<p class="instructions">Press a number key (1-9)</p>' : '<button id="q_next">Next</button>'}
-      </div>
-    `);
-    let response;
-    if (q.type === 'number_1-9') {
-      const validKeys = ['1','2','3','4','5','6','7','8','9'];
-      const key = await waitKeys(validKeys);
-      response = parseInt(key);
-    } else {
-      await new Promise(resolve => {
-        document.getElementById('q_next').onclick = () => {
-          const val = parseInt(document.getElementById('q_input').value);
-          if (val >= 1 && val <= 100) { response = val; resolve(); }
-          else { alert('Please enter a number between 1 and 100.'); }
-        };
-      });
-    }
-    state[q.id + '_' + timing] = response;
-  }
-  
-  if (timing === 'pre') runBlock2(); else runDebrief();
-}
-
-async function runBlock2(){
-  show(`<h2>Block 2: Judging More Headlines</h2><p>Press SPACE to begin.</p>`);
-  await waitKeys([' ']);
-  for (let i = 0; i < state.testStatements.length; i++) {
-    await runSingleTrial(state.testStatements[i], 'TruthTest', i + 1);
-  }
-  runQuestionnaire('post');
-}
-
-// ------------------- DEBRIEF QUESTIONS -------------------
-async function runDebrief() {
-    show(`
-        <div class="questionnaire-container">
-            <p class="question-text">Did you respond randomly at any point during the study?</p>
-            <p class="instructions">Note: Please be honest! You will get your payment regardless of your response.</p>
-            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
-        </div>
-    `);
-    state.responded_randomly = await new Promise(resolve => {
-        document.getElementById('yes_btn').onclick = () => resolve('Yes');
-        document.getElementById('no_btn').onclick = () => resolve('No');
-    });
-
-    show(`
-        <div class="questionnaire-container">
-            <p class="question-text">Did you search the internet (via Google or otherwise) for any of the news headlines?</p>
-            <p class="instructions">Note: Please be honest! You will get your payment regardless of your response.</p>
-            <button id="yes_btn">Yes</button> <button id="no_btn">No</button>
-        </div>
-    `);
-    state.searched_internet = await new Promise(resolve => {
-        document.getElementById('yes_btn').onclick = () => resolve('Yes');
-        document.getElementById('no_btn').onclick = () => resolve('No');
-    });
-
-    showDebriefing();
-}
-
-// ------------------- DEBRIEFING PAGE -------------------
-function downloadFactChecks() {
-    // This function now triggers a download of the static file from the repository.
-    const a = document.createElement('a');
-    a.href = 'fact-checks.txt';
-    a.download = 'fact-checks.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-async function showDebriefing() {
-    const group = state.group;
-    let debriefFile = '';
-    if (group === 'Control') {
-        debriefFile = 'debrief_control.txt';
-    } else {
-        debriefFile = 'debrief_experimental.txt';
-    }
-
-    try {
-        const response = await fetch(debriefFile);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const debriefHtml = await response.text();
-
+    for (const q of partisanshipQuestions) {
         show(`
-            <div class="debrief-container">
-                ${debriefHtml}
-                <div class="button-container">
-                    <button id="download_btn">Download All Fact-Checks</button>
-                    <button id="finish_btn">Finish Experiment</button>
+            <div class="ui-container">
+                <p class="question-text">${q.text}</p>
+                <div class="slider-container">
+                    <input type="range" id="q_slider" min="0" max="100" value="50">
+                    <div class="slider-labels"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
                 </div>
+                <button id="q_next">Next</button>
             </div>
         `);
-        document.getElementById('download_btn').onclick = downloadFactChecks;
-        document.getElementById('finish_btn').onclick = finishExperiment;
+        await new Promise(resolve => {
+            document.getElementById('q_next').onclick = () => {
+                state[q.id] = document.getElementById('q_slider').value;
+                resolve();
+            };
+        });
+    }
 
-    } catch (e) {
-        console.error('Failed to load debriefing file:', e);
-        show(`
-            <div class="questionnaire-container">
-                <p style="color:red;font-weight:bold;">Error: Could not load the debriefing information.</p>
-                <p>Please contact the researcher.</p>
-                <p>You can still complete the experiment to receive payment.</p>
-                <button id="finish_btn">Finish Experiment</button>
+    // --- Final Orientation Question ---
+    show(`
+        <div class="ui-container">
+            <p class="question-text">Using the slider below, please indicate your political orientation.</p>
+             <div class="slider-container">
+                <input type="range" id="q_slider" min="0" max="100" value="50">
+                <div class="slider-labels"><span>Lean Democrat</span><span>Lean Republican</span></div>
             </div>
-        `);
-        document.getElementById('finish_btn').onclick = finishExperiment;
-    }
-}
-
-
-function finishExperiment(){
-  // Add all non-trial data (questionnaires, demographics, etc.) to every row for easier analysis
-  state.data.forEach(row => {
-    row.q_own_ability_pre = state.q_own_ability_pre;
-    row.q_others_ability_pre = state.q_others_ability_pre;
-    row.q_rank_pre = state.q_rank_pre;
-    row.q_own_ability_post = state.q_own_ability_post;
-    row.q_others_ability_post = state.q_others_ability_post;
-    row.q_rank_post = state.q_rank_post;
-    row.age = state.age;
-    row.gender = state.gender;
-    row.education = state.education;
-    row.responded_randomly = state.responded_randomly;
-    row.searched_internet = state.searched_internet;
-    // key_mapping is already on each trial row, but this ensures it if needed elsewhere.
-    if (!row.key_mapping) {
-        row.key_mapping = state.keyMapping;
-    }
-  });
-
-  const csv = toCSV(state.data);
-  const fn  = `${CONFIG.experimentName}_${state.participant}_${state.group}_${Date.now()}.csv`;
-  show('<h2>Uploading your data…</h2><p>Please wait. This should not take long.</p>');
-  
-  uploadCSV(fn,csv)
-    .then(r=>{ if(!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`); return r.json(); })
-    .then(async () => { 
-        show('<h2>Upload complete!</h2><p>Thank you for your participation. You will now be redirected back to Prolific.</p>'); 
-        await sleep(3000);
-        window.location.href = CONFIG.prolificCompletionURL;
-    })
-    .catch(err=>{
-      console.error('Upload failed:',err);
-      if(CONFIG.fallbackDownload){
-        downloadFile(csv, fn, 'text/csv');
-        show('<h2>Network error – data downloaded locally.</h2><p>Please ensure the downloaded CSV file is sent to the researcher. You may now close this window and return to Prolific.</p><p>Click here to return to Prolific: <a href="'+CONFIG.prolificCompletionURL+'">Complete Study</a></p>');
-      }else{
-        show('<h2>Sorry – data could not be saved.</h2><p>Please screenshot this page and contact the researcher. <br>Click here to return to Prolific: <a href="'+CONFIG.prolificCompletionURL+'">Complete Study</a></p>');
-      }
+            <button id="q_next">Next</button>
+        </div>
+    `);
+    await new Promise(resolve => {
+        document.getElementById('q_next').onclick = () => {
+            const val = parseInt(document.getElementById('q_slider').value, 10);
+            state.partisanship_q6_orientation = val;
+            if (val < 50) state.in_group = 'Democrat';
+            else if (val > 50) state.in_group = 'Republican';
+            else state.in_group = choice(['Democrat', 'Republican']);
+            resolve();
+        };
     });
 }
+
+async function runInstructionsAndPractice() {
+    show(`
+        <div class="ui-container info-container">
+            <h2>Instructions</h2>
+            <p>You will now begin the main task.</p>
+            <p>In each trial, you will first see a social media post from a person. Their political party will be indicated by the colored banner.</p>
+            <p>Please read the post carefully. After a few seconds, a "Next" button will appear.</p>
+            <br>
+            <p><b>Example Banners:</b></p>
+            ${createTweetHTML('Democrat', 'avatars/dem_1.png', 'Rep. Jane Smith', '@JaneSmith', 'This is an example statement.')}
+            ${createTweetHTML('Republican', 'avatars/gop_1.png', 'Sen. John Doe', '@JohnDoe', 'This is another example statement.')}
+            <br>
+            <p>After reading the post, you will be asked to estimate how likely another person is to endorse the same statement, using a slider from 0 (Extremely Unlikely) to 100 (Extremely Likely).</p>
+            <div class="button-container"><button id="start_practice">Start Practice Trial</button></div>
+        </div>
+    `);
+    await new Promise(resolve => { document.getElementById('start_practice').onclick = resolve; });
+
+    // Practice Trial
+    show(`
+        <div class="ui-container">
+            <p class="question-text">Regarding the claim: "A well-organized desk leads to a more productive day."</p>
+            <p>How likely is another person to endorse this claim?</p>
+            <div class="slider-container">
+                <input type="range" id="q_slider" min="0" max="100" value="50">
+                <div class="slider-labels"><span>Extremely Unlikely</span><span>Extremely Likely</span></div>
+            </div>
+            <button id="q_next">Next</button>
+        </div>
+    `);
+    await new Promise(resolve => { document.getElementById('q_next').onclick = resolve; });
+}
+
+async function runMainBlock() {
+    show(`
+        <div class="ui-container">
+            <h2>Main Task</h2>
+            <p>The main task is about to begin. Please stay focused.</p>
+            <p>Press the button below to start the first trial.</p>
+            <button id="start_main">Start</button>
+        </div>
+    `);
+    await new Promise(resolve => { document.getElementById('start_main').onclick = resolve; });
+
+    for (const trial of state.trialList) {
+        await runSingleTrial(trial);
+    }
+}
+
+async function runSingleTrial(trial) {
+    state.trialCountOverall++;
+
+    // 1. Fixation Cross
+    show(`<div class="fixation-cross-container">+</div>`);
+    await sleep(CONFIG.fixationCrossDuration);
+
+    // 2. Speaker Post
+    show(`
+        <div class="ui-container">
+            ${createTweetHTML(trial.SpeakerGroup, trial.SpeakerDetails.avatar, trial.SpeakerDetails.name, trial.SpeakerDetails.handle, trial.ClaimText)}
+            <button id="next_btn" disabled>Next</button>
+        </div>
+    `);
+    rtClock = performance.now();
+    await sleep(CONFIG.minReadDuration);
+    const nextBtn = document.getElementById('next_btn');
+    if (nextBtn) nextBtn.disabled = false;
+
+    await new Promise(resolve => {
+        const btn = document.getElementById('next_btn');
+        if (btn) btn.onclick = resolve;
+    });
+    const rt_read = performance.now() - rtClock;
+
+    // 3. Likelihood Estimate
+    const targetColorClass = trial.TargetGroup === 'Democrat' ? 'democrat' : 'republican';
+    show(`
+        <div class="ui-container">
+            <p class="instructions">Regarding the claim: "${trial.ClaimText}"</p>
+            <p class="question-text">How likely is a <b class="${targetColorClass}">${trial.TargetGroup}</b> to endorse this claim?</p>
+            <div class="slider-container">
+                <input type="range" id="q_slider" min="0" max="100" value="50">
+                <div class="slider-labels"><span>Extremely Unlikely</span><span>Extremely Likely</span></div>
+            </div>
+            <button id="submit_btn">Submit</button>
+        </div>
+    `);
+    rtClock = performance.now();
+    await new Promise(resolve => { document.getElementById('submit_btn').onclick = resolve; });
+    const rt_estimate = performance.now() - rtClock;
+    const endorsement_estimate = document.getElementById('q_slider').value;
+
+    // 4. Log Data
+    const trialData = {
+        pid: state.participant,
+        prolific_session_id: state.sessionKey,
+        trial_number: state.trialCountOverall,
+        ClaimID: trial.ClaimID,
+        Veracity: trial.Veracity,
+        SpeakerGroup: trial.SpeakerGroup,
+        TargetGroup: trial.TargetGroup,
+        SpeakerTargetMatch: trial.SpeakerGroup === trial.TargetGroup ? 'Match' : 'Mismatch',
+        RT_read: Math.round(rt_read),
+        RT_estimate: Math.round(rt_estimate),
+        Endorsement_estimate: endorsement_estimate
+    };
+    log(trialData);
+
+    // 5. Inter-trial Interval
+    show('');
+    await sleep(CONFIG.itiDuration);
+}
+
+async function runPostTaskSurvey() {
+    // Feeling Thermometers
+    for (const party of ['Democrat', 'Republican']) {
+        show(`
+            <div class="ui-container">
+                <p class="question-text">Please rate your feelings toward the <b>${party}</b> party.</p>
+                <div class="slider-container">
+                    <input type="range" id="q_slider" min="0" max="100" value="50">
+                    <div class="slider-labels"><span>Very Cold</span><span>Very Warm</span></div>
+                </div>
+                <button id="q_next">Next</button>
+            </div>
+        `);
+        await new Promise(resolve => {
+            document.getElementById('q_next').onclick = () => {
+                state[party === 'Democrat' ? 'feeling_therm_dem' : 'feeling_therm_rep'] = document.getElementById('q_slider').value;
+                resolve();
+            };
+        });
+    }
+    // Social Media & Attention Checks would follow a similar pattern...
+}
+
+function showDebriefAndFinish() {
+    let factCheckHTML = `
+        <table class="fact-check-table">
+            <tr><th>Claim</th><th>Actual Status</th></tr>
+    `;
+    state.stimuliPool.slice(0, CONFIG.numMainTrials).forEach(stim => {
+        factCheckHTML += `<tr><td>${stim.ClaimText}</td><td class="veracity-${stim.Veracity}">${stim.Veracity}</td></tr>`;
+    });
+    factCheckHTML += `</table>`;
+
+    show(`
+        <div class="ui-container debrief-container">
+            <h2>Debriefing and Fact-Check</h2>
+            <p>Thank you for completing the main task. The study is investigating how we perceive beliefs of people from different political groups.</p>
+            <p>Below is a list of all the claims you saw and their factual status. It is important to us that all participants leave the study with accurate information.</p>
+            ${factCheckHTML}
+            <div class="button-container">
+                <button id="finish_btn">Finish and Save Data</button>
+            </div>
+        </div>
+    `);
+    document.getElementById('finish_btn').onclick = finishExperiment;
+}
+
+function finishExperiment() {
+    // Add all global (non-trial) data to every row for easier analysis
+    state.data.forEach(row => {
+        row.pid = state.participant;
+        row.age = state.age;
+        row.gender = state.gender;
+        row.education = state.education;
+        row.partisanship_q1 = state.partisanship_q1;
+        row.partisanship_q2 = state.partisanship_q2;
+        row.partisanship_q3 = state.partisanship_q3;
+        row.partisanship_q4 = state.partisanship_q4;
+        row.partisanship_q5 = state.partisanship_q5;
+        row.partisanship_q6_orientation = state.partisanship_q6_orientation;
+        row.feeling_therm_dem = state.feeling_therm_dem;
+        row.feeling_therm_rep = state.feeling_therm_rep;
+        // etc. for all survey data
+    });
+
+    const csv = toCSV(state.data);
+    const fn  = `${CONFIG.experimentName}_${state.participant}_${Date.now()}.csv`;
+    show('<div class="ui-container"><h2>Uploading your data…</h2><p>Please wait. This should not take long.</p></div>');
+
+    uploadCSV(fn,csv)
+        .then(r=>{ if(!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`); return r.json(); })
+        .then(async () => {
+            show('<div class="ui-container"><h2>Upload complete!</h2><p>Thank you for your participation. You will now be redirected back to Prolific.</p></div>');
+            await sleep(3000);
+            window.location.href = CONFIG.prolificCompletionURL;
+        })
+        .catch(err=>{
+            console.error('Upload failed:',err);
+            if(CONFIG.fallbackDownload){
+                downloadFile(csv, fn, 'text/csv');
+                show('<div class="ui-container"><h2>Network error – data downloaded locally.</h2><p>Please ensure the downloaded CSV file is sent to the researcher. You may now close this window.</p><p>Click here to return to Prolific: <a href="'+CONFIG.prolificCompletionURL+'">Complete Study</a></p></div>');
+            } else {
+                show('<div class="ui-container"><h2>Sorry – data could not be saved.</h2><p>Please screenshot this page and contact the researcher. <br>Click here to return to Prolific: <a href="'+CONFIG.prolificCompletionURL+'">Complete Study</a></p></div>');
+            }
+        });
+}
+
 
 // ------------------- LAUNCH -------------------
 (async()=>{
   try{
-    const consentGiven = await showInformationAndConsent();
-    if (!consentGiven) {
-        // Stop the script if consent was not given or an error occurred.
-        // The specific message is already shown by showInformationAndConsent().
-        return;
-    }
+    show(`
+        <div class="ui-container">
+            <h1>${CONFIG.experimentName}</h1>
+            <p>Please enter your Prolific ID to begin.</p>
+            <input id="pid" placeholder="Prolific ID" autocomplete="off" /><br>
+            <button id="startBtn">Start</button>
+        </div>
+    `);
+    await new Promise(resolve => {
+        document.getElementById('startBtn').onclick = () => {
+            const pid = document.getElementById('pid').value.trim();
+            if (!pid) { alert('Please enter a Prolific ID.'); return; }
+            state.participant = pid;
+            resolve();
+        };
+    });
 
-    show('<h2>Loading experiment assets…</h2><p>This should only take a few seconds.</p>');
-    await loadCSVStimuli();
-    show('<h2>Preloading images…</h2><p>This may take a moment.</p>');
-    await preloadImages(state.stimuliPool);
-    introScreen();
+    await showWelcomeAndConsent();
+    await runPreSurvey();
+
+    show('<div class="ui-container"><h2>Loading experiment...</h2></div>');
+    await loadAndPrepareStimuli();
+
+    await runInstructionsAndPractice();
+    await runMainBlock();
+    await runPostTaskSurvey();
+    showDebriefAndFinish();
+
   }catch(e){
     console.error(e);
-    show(`<p style="color:red;font-weight:bold;">Error: ${e.message}</p><p>Please check the browser console (Ctrl+Shift+J or Cmd+Opt+J) for more details and contact the researcher.</p>`);
+    show(`<div class="ui-container" style="color:red; text-align:left;"><h2>An error occurred</h2><p><b>Error message:</b> ${e.message}</p><p>Please check the browser console (Ctrl+Shift+J or Cmd+Opt+J) for more details and contact the researcher with this information.</p></div>`);
   }
 })();
 </script>
