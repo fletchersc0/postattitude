@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -582,19 +581,16 @@ async function loadAndPrepareStimuli() {
 
 function generateTrialList() {
     // 1. Create a session-specific, randomized pool of people.
-    // This ensures that for each participant, the pairing of names and faces is random.
+    // This ensures that for each participant, the pairing of names is random.
     const allPeople = [];
     const genders = ['male', 'female'];
     for (const gender of genders) {
         const names = shuffle([...CONFIG.names[gender]]);
-        const avatars = shuffle([...CONFIG.avatars[gender]]);
-        if (names.length !== avatars.length) {
-            throw new Error(`Mismatch between number of names and avatars for gender: ${gender}`);
-        }
+        // Instead of using different avatars from the array, always use 'icon.png'
         for (let i = 0; i < names.length; i++) {
             allPeople.push({
                 ...names[i],
-                avatar: avatars[i]
+                avatar: 'icon.png'  // Always use the same icon for everyone
             });
         }
     }
