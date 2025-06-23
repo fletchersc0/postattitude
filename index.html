@@ -243,66 +243,73 @@ const CONFIG = {
   itiDuration            : 300,
   numMainTrials          : 32,
   pisFile                : 'PIS.txt',             // Added for PIS functionality
-  names: {
-      male: [
-          { name: 'Sen. David Miller', handle: '@DavidMiller' }, { name: 'Gov. Mark Thompson', handle: '@GovThompson' },
-          { name: 'Rep. Chris Davis', handle: '@RepDavis' }, { name: 'Sen. James White', handle: '@SenWhite' },
-          { name: 'Sen. Michael Clark', handle: '@MichaelClark' }, { name: 'Rep. Daniel Lewis', handle: '@DanLewis' },
-          { name: 'Gov. Paul Walker', handle: '@WalkerForGov' }, { name: 'Sen. Kevin Hall', handle: '@SenKevinHall' },
-          { name: 'Rep. Brian Allen', handle: '@RepAllen' }, { name: 'Gov. Edward Young', handle: '@GovEdYoung' },
-          { name: 'Sen. Jason Hernandez', handle: '@JasonHernandez' }, { name: 'Rep. Steven King', handle: '@SteveKing' },
-          { name: 'Gov. George Wright', handle: '@GeorgeWright' }, { name: 'Sen. Larry Scott', handle: '@SenLarryScott' },
-          { name: 'Rep. Jeffrey Green', handle: '@JeffGreen' }, { name: 'Gov. Frank Adams', handle: '@FrankAdams' },
-          { name: 'Sen. John Smith', handle: '@JohnSmith' }, { name: 'Rep. Robert Brown', handle: '@BobBrown' },
-          { name: 'Gov. Michael Wilson', handle: '@WilsonForGov' }, { name: 'Sen. William First', handle: '@BillFirst' },
-          { name: 'Sen. Mark Robinson', handle: '@MarkRobinson' }, { name: 'Rep. Donald Hughes', handle: '@RepDonHughes' },
-          { name: 'Gov. Ronald Bell', handle: '@RonBell' }, { name: 'Sen. Kenneth Murphy', handle: '@KenMurphy' },
-          { name: 'Rep. Andrew Bailey', handle: '@AndyBailey' }, { name: 'Gov. Joshua Rivera', handle: '@GovRivera' },
-          { name: 'Sen. Timothy Cox', handle: '@TimCox' }, { name: 'Rep. Brandon Howard', handle: '@BrandonHoward' },
-          { name: 'Gov. Justin Ward', handle: '@JustinWard' }, { name: 'Sen. Gregory Reed', handle: '@SenGregReed' },
-          { name: 'Rep. Samuel Cook', handle: '@SamCook' }, { name: 'Gov. Benjamin Morgan', handle: '@BenMorgan' }
-      ],
-      female: [
-          { name: 'Rep. Sarah Jones', handle: '@SarahJones' }, { name: 'Gov. Maria Garcia', handle: '@GovGarcia' },
-          { name: 'Sen. Emily Carter', handle: '@EmilyCarter' }, { name: 'Rep. Linda Harris', handle: '@LindaHarris' },
-          { name: 'Sen. Nancy Baker', handle: '@NancyBaker' }, { name: 'Rep. Betty Nelson', handle: '@RepBettyNelson' },
-          { name: 'Gov. Donna Carter', handle: '@GovCarter' }, { name: 'Sen. Michelle Mitchell', handle: '@SenMitchell' },
-          { name: 'Rep. Laura Perez', handle: '@LauraPerez' }, { name: 'Gov. Kimberly Roberts', handle: '@KimRoberts' },
-          { name: 'Sen. Deborah Turner', handle: '@DebTurner' }, { name: 'Rep. Amanda Phillips', handle: '@AmandaPhillips' },
-          { name: 'Gov. Cynthia Campbell', handle: '@GovCynthia' }, { name: 'Sen. Melissa Parker', handle: '@MelissaParker' },
-          { name: 'Rep. Stephanie Evans', handle: '@StephEvans' }, { name: 'Gov. Rebecca Edwards', handle: '@BeccaEdwards' },
-          { name: 'Gov. Susan Moore', handle: '@GovMoore' }, { name: 'Rep. Karen Taylor', handle: '@RepTaylor' },
-          { name: 'Sen. Patricia Martin', handle: '@PatMartin' }, { name: 'Gov. Jennifer Clark', handle: '@JenniferClark' },
-          { name: 'Rep. Sharon Peterson', handle: '@SharonPeterson' }, { name: 'Sen. Kathleen Gray', handle: '@SenGray' },
-          { name: 'Gov. Carol James', handle: '@GovCarolJames' }, { name: 'Rep. Diane Watson', handle: '@DianeWatson' },
-          { name: 'Sen. Heather Brooks', handle: '@HeatherBrooks' }, { name: 'Gov. Janet Kelly', handle: '@JanetKelly' },
-          { name: 'Rep. Christina Sanders', handle: '@ChrisSanders' }, { name: 'Sen. Joyce Price', handle: '@JoycePrice' },
-          { name: 'Gov. Victoria Bennett', handle: '@VickyBennett' }, { name: 'Rep. Lauren Wood', handle: '@LaurenWood' },
-          { name: 'Sen. Judith Ross', handle: '@JudyRoss' }, { name: 'Gov. Cheryl Henderson', handle: '@CherylHenderson' }
-      ]
-  },
-  avatars: {
-      male: [
-        'avatars/male_01.png', 'avatars/male_02.png', 'avatars/male_03.png', 'avatars/male_04.png',
-        'avatars/male_05.png', 'avatars/male_06.png', 'avatars/male_07.png', 'avatars/male_08.png',
-        'avatars/male_09.png', 'avatars/male_10.png', 'avatars/male_11.png', 'avatars/male_12.png',
-        'avatars/male_13.png', 'avatars/male_14.png', 'avatars/male_15.png', 'avatars/male_16.png',
-        'avatars/male_17.png', 'avatars/male_18.png', 'avatars/male_19.png', 'avatars/male_20.png',
-        'avatars/male_21.png', 'avatars/male_22.png', 'avatars/male_23.png', 'avatars/male_24.png',
-        'avatars/male_25.png', 'avatars/male_26.png', 'avatars/male_27.png', 'avatars/male_28.png',
-        'avatars/male_29.png', 'avatars/male_30.png', 'avatars/male_31.png', 'avatars/male_32.png'
-      ],
-      female: [
-        'avatars/female_01.png', 'avatars/female_02.png', 'avatars/female_03.png', 'avatars/female_04.png',
-        'avatars/female_05.png', 'avatars/female_06.png', 'avatars/female_07.png', 'avatars/female_08.png',
-        'avatars/female_09.png', 'avatars/female_10.png', 'avatars/female_11.png', 'avatars/female_12.png',
-        'avatars/female_13.png', 'avatars/female_14.png', 'avatars/female_15.png', 'avatars/female_16.png',
-        'avatars/female_17.png', 'avatars/female_18.png', 'avatars/female_19.png', 'avatars/female_20.png',
-        'avatars/female_21.png', 'avatars/female_22.png', 'avatars/female_23.png', 'avatars/female_24.png',
-        'avatars/female_25.png', 'avatars/female_26.png', 'avatars/female_27.png', 'avatars/female_28.png',
-        'avatars/female_29.png', 'avatars/female_30.png', 'avatars/female_31.png', 'avatars/female_32.png'
-      ]
-  },
+  // Combined all names into a single array
+  names: [
+    { name: 'Sen. David Miller', handle: '@DavidMiller' }, 
+    { name: 'Gov. Mark Thompson', handle: '@GovThompson' },
+    { name: 'Rep. Chris Davis', handle: '@RepDavis' }, 
+    { name: 'Sen. James White', handle: '@SenWhite' },
+    { name: 'Sen. Michael Clark', handle: '@MichaelClark' }, 
+    { name: 'Rep. Daniel Lewis', handle: '@DanLewis' },
+    { name: 'Gov. Paul Walker', handle: '@WalkerForGov' }, 
+    { name: 'Sen. Kevin Hall', handle: '@SenKevinHall' },
+    { name: 'Rep. Brian Allen', handle: '@RepAllen' }, 
+    { name: 'Gov. Edward Young', handle: '@GovEdYoung' },
+    { name: 'Sen. Jason Hernandez', handle: '@JasonHernandez' }, 
+    { name: 'Rep. Steven King', handle: '@SteveKing' },
+    { name: 'Gov. George Wright', handle: '@GeorgeWright' }, 
+    { name: 'Sen. Larry Scott', handle: '@SenLarryScott' },
+    { name: 'Rep. Jeffrey Green', handle: '@JeffGreen' }, 
+    { name: 'Gov. Frank Adams', handle: '@FrankAdams' },
+    { name: 'Sen. John Smith', handle: '@JohnSmith' }, 
+    { name: 'Rep. Robert Brown', handle: '@BobBrown' },
+    { name: 'Gov. Michael Wilson', handle: '@WilsonForGov' }, 
+    { name: 'Sen. William First', handle: '@BillFirst' },
+    { name: 'Sen. Mark Robinson', handle: '@MarkRobinson' }, 
+    { name: 'Rep. Donald Hughes', handle: '@RepDonHughes' },
+    { name: 'Gov. Ronald Bell', handle: '@RonBell' }, 
+    { name: 'Sen. Kenneth Murphy', handle: '@KenMurphy' },
+    { name: 'Rep. Andrew Bailey', handle: '@AndyBailey' }, 
+    { name: 'Gov. Joshua Rivera', handle: '@GovRivera' },
+    { name: 'Sen. Timothy Cox', handle: '@TimCox' }, 
+    { name: 'Rep. Brandon Howard', handle: '@BrandonHoward' },
+    { name: 'Gov. Justin Ward', handle: '@JustinWard' }, 
+    { name: 'Sen. Gregory Reed', handle: '@SenGregReed' },
+    { name: 'Rep. Samuel Cook', handle: '@SamCook' }, 
+    { name: 'Gov. Benjamin Morgan', handle: '@BenMorgan' },
+    { name: 'Rep. Sarah Jones', handle: '@SarahJones' }, 
+    { name: 'Gov. Maria Garcia', handle: '@GovGarcia' },
+    { name: 'Sen. Emily Carter', handle: '@EmilyCarter' }, 
+    { name: 'Rep. Linda Harris', handle: '@LindaHarris' },
+    { name: 'Sen. Nancy Baker', handle: '@NancyBaker' }, 
+    { name: 'Rep. Betty Nelson', handle: '@RepBettyNelson' },
+    { name: 'Gov. Donna Carter', handle: '@GovCarter' }, 
+    { name: 'Sen. Michelle Mitchell', handle: '@SenMitchell' },
+    { name: 'Rep. Laura Perez', handle: '@LauraPerez' }, 
+    { name: 'Gov. Kimberly Roberts', handle: '@KimRoberts' },
+    { name: 'Sen. Deborah Turner', handle: '@DebTurner' }, 
+    { name: 'Rep. Amanda Phillips', handle: '@AmandaPhillips' },
+    { name: 'Gov. Cynthia Campbell', handle: '@GovCynthia' }, 
+    { name: 'Sen. Melissa Parker', handle: '@MelissaParker' },
+    { name: 'Rep. Stephanie Evans', handle: '@StephEvans' }, 
+    { name: 'Gov. Rebecca Edwards', handle: '@BeccaEdwards' },
+    { name: 'Gov. Susan Moore', handle: '@GovMoore' }, 
+    { name: 'Rep. Karen Taylor', handle: '@RepTaylor' },
+    { name: 'Sen. Patricia Martin', handle: '@PatMartin' }, 
+    { name: 'Gov. Jennifer Clark', handle: '@JenniferClark' },
+    { name: 'Rep. Sharon Peterson', handle: '@SharonPeterson' }, 
+    { name: 'Sen. Kathleen Gray', handle: '@SenGray' },
+    { name: 'Gov. Carol James', handle: '@GovCarolJames' }, 
+    { name: 'Rep. Diane Watson', handle: '@DianeWatson' },
+    { name: 'Sen. Heather Brooks', handle: '@HeatherBrooks' }, 
+    { name: 'Gov. Janet Kelly', handle: '@JanetKelly' },
+    { name: 'Rep. Christina Sanders', handle: '@ChrisSanders' }, 
+    { name: 'Sen. Joyce Price', handle: '@JoycePrice' },
+    { name: 'Gov. Victoria Bennett', handle: '@VickyBennett' }, 
+    { name: 'Rep. Lauren Wood', handle: '@LaurenWood' },
+    { name: 'Sen. Judith Ross', handle: '@JudyRoss' }, 
+    { name: 'Gov. Cheryl Henderson', handle: '@CherylHenderson' }
+  ],
   masterHeader : [
     'pid', 'prolific_session_id', 'age', 'gender', 'education',
     'partisanship_q1', 'partisanship_q2', 'partisanship_q3', 'partisanship_q4', 'partisanship_q5', 'partisanship_q6_orientation',
@@ -580,23 +587,12 @@ async function loadAndPrepareStimuli() {
 }
 
 function generateTrialList() {
-    // 1. Create a session-specific, randomized pool of people.
-    // This ensures that for each participant, the pairing of names is random.
-    const allPeople = [];
-    const genders = ['male', 'female'];
-    for (const gender of genders) {
-        const names = shuffle([...CONFIG.names[gender]]);
-        // Instead of using different avatars from the array, always use 'icon.png'
-        for (let i = 0; i < names.length; i++) {
-            allPeople.push({
-                ...names[i],
-                avatar: 'icon.png'  // Always use the same icon for everyone
-            });
-        }
-    }
-    const shuffledPeople = shuffle(allPeople);
-    if (shuffledPeople.length < CONFIG.numMainTrials * 2) {
-        throw new Error("Insufficient unique people for the number of trials. Need 64 people for 32 trials.");
+    // 1. Shuffle all names
+    const allPeople = shuffle([...CONFIG.names]);
+    
+    // Make sure we have enough people for all trials
+    if (allPeople.length < CONFIG.numMainTrials * 2) {
+        throw new Error(`Insufficient unique people for the number of trials. Need ${CONFIG.numMainTrials * 2} people, found ${allPeople.length}.`);
     }
 
     // 2. Create a balanced set of trial structures (16 match, 16 mismatch)
@@ -617,8 +613,12 @@ function generateTrialList() {
         const structure = trialStructures[i];
         
         // Pull the next two unique individuals for this trial
-        const speakerDetails = shuffledPeople.pop();
-        const targetDetails = shuffledPeople.pop();
+        const speakerPerson = allPeople.pop();
+        const targetPerson = allPeople.pop();
+        
+        // Add the icon.png avatar to both people
+        const speakerDetails = { ...speakerPerson, avatar: 'icon.png' };
+        const targetDetails = { ...targetPerson, avatar: 'icon.png' };
 
         state.trialList.push({
             ...shuffledStimuli[i],
