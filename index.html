@@ -530,6 +530,29 @@ async function runScreeningSequence() {
   }
 }
 
+async function collectProlificID() {
+  show(`
+    <div class="ui-container">
+        <h1>${CONFIG.experimentName}</h1>
+        <p>Please enter your Prolific ID to begin.</p>
+        <input id="pid" placeholder="Prolific ID" autocomplete="off" /><br>
+        <button id="startBtn">Start</button>
+    </div>
+  `);
+  
+  return new Promise(resolve => {
+    document.getElementById('startBtn').onclick = () => {
+      const pid = document.getElementById('pid').value.trim();
+      if (!pid) { 
+        alert('Please enter a Prolific ID.'); 
+        return; 
+      }
+      state.participant = pid;
+      resolve();
+    };
+  });
+}
+
 // ------------------- STIMULUS & TRIAL LIST PREPARATION -------------------
 async function loadAndPrepareStimuli() {
     // Load claims from CSV
@@ -893,25 +916,10 @@ function finishExperiment() {
 // ------------------- LAUNCH -------------------
 (async()=>{
   try{
-    show(`
-        <div class="ui-container">
-            <h1>${CONFIG.experimentName}</h1>
-            <p>Please enter your Prolific ID to begin.</p>
-            <input id="pid" placeholder="Prolific ID" autocomplete="off" /><br>
-            <button id="startBtn">Start</button>
-        </div>
-    `);
-    await new Promise(resolve => {
-        document.getElementById('startBtn').onclick = () => {
-            const pid = document.getElementById('pid').value.trim();
-            if (!pid) { alert('Please enter a Prolific ID.'); return; }
-            state.participant = pid;
-            resolve();
-        };
-    });
-
+    // Start directly with the PIS (removed initial welcome screen)
     await showPIS();
     await runScreeningSequence();
+    await collectProlificID();
     await showWelcomeAndConsent();
     await runPreSurvey();
 
