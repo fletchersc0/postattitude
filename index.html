@@ -188,6 +188,44 @@
         background: var(--input-bg);
     }
 
+    /* ----- PIS STYLES ----- */
+    .pis-content {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      text-align: left;
+      margin-bottom: 1rem;
+      background: var(--input-bg);
+    }
+    .button-bar { margin-top: 1.5rem; text-align: center; }
+
+    /* PIS Full-Screen Mode */
+    body.pis-mode {
+      align-items: flex-start;
+      justify-content: center;
+    }
+    body.pis-mode #stage {
+      padding-top: 4vh;
+      padding-bottom: 4vh;
+      text-align: left;
+      max-width: 900px;
+    }
+    body.pis-mode .pis-content {
+      height: auto;
+      overflow-y: visible;
+      border: none;
+      padding: 0;
+      background: none;
+      margin-bottom: 0;
+      line-height: 1.6;
+    }
+    .pis-content h1 { font-size: 1.8em; margin-bottom: 0.4em; }
+    .pis-content h2 { font-size: 1.25em; margin-top: 1.8em; }
+    .pis-content ul { margin-left: 1.2em; text-align: left; }
+    .pis-content p { text-align: left; }
+    .pis-content a { color: #0645AD; text-decoration: none; }
+    .pis-content a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -205,6 +243,7 @@ const CONFIG = {
   minReadDuration        : 3000,
   itiDuration            : 300,
   numMainTrials          : 32,
+  pisFile                : 'PIS.txt',             // Added for PIS functionality
   names: {
       male: [
           { name: 'Sen. David Miller', handle: '@DavidMiller' }, { name: 'Gov. Mark Thompson', handle: '@GovThompson' },
@@ -373,6 +412,123 @@ function createTargetBannerHTML(party, avatarSrc, name, handle) {
     `;
 }
 
+// ------------------ PIS & SCREENING FUNCTIONS ------------------
+async function showPIS() {
+  try {
+    const response = await fetch(CONFIG.pisFile);
+    if (!response.ok) {
+      throw new Error('Could not load the Participant Information Sheet');
+    }
+    const pisText = await response.text();
+
+    const parser = new DOMParser();
+    const pisDoc = parser.parseFromString(pisText, 'text/html');
+    const pisBodyContent = pisDoc.body.innerHTML;
+
+    document.body.classList.add('pis-mode');
+
+    show(`
+      <div class="ui-container info-container">
+        <div class="pis-content"></div>
+        <div class="button-bar">
+          <button id="download-pis">Download PIS as PDF</button>
+          <button id="next-pis">Next</button>
+        </div>
+      </div>
+    `);
+    
+    document.querySelector('.pis-content').innerHTML = pisBodyContent;
+    
+    document.getElementById('download-pis').onclick = () => {
+      const a = document.createElement('a');
+      a.href = 'PIS.pdf';
+      a.download = 'Participant-Information-Sheet.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    return new Promise(resolve => {
+      document.getElementById('next-pis').onclick = () => {
+        document.body.classList.remove('pis-mode');
+        resolve();
+      };
+    });
+  } catch (e) {
+    console.error('PIS loading error:', e);
+    // Provide a fallback PIS content
+    document.body.classList.add('pis-mode');
+    show(`
+      <div class="ui-container info-container">
+        <div class="pis-content">
+          <h1>Participant Information Sheet</h1>
+          <p>There was an error loading the full information sheet. Please contact the researcher if you have any questions.</p>
+          <h2>Study Overview</h2>
+          <p>This study examines how we perceive people with different political affiliations.</p>
+          <h2>Your Participation</h2>
+          <p>You will be asked to view social media posts and make judgments about them.</p>
+        </div>
+        <div class="button-bar">
+          <button id="next-pis">Next</button>
+        </div>
+      </div>
+    `);
+    
+    return new Promise(resolve => {
+      document.getElementById('next-pis').onclick = () => {
+        document.body.classList.remove('pis-mode');
+        resolve();
+      };
+    });
+  }
+}
+
+function exitToProlific() {
+  const message = `
+    <div class="ui-container">
+      <h2>Thank you for your interest.</h2>
+      <p>As you do not meet the eligibility criteria or do not wish to consent, you cannot proceed with the study.</p>
+      <p>You will now be returned to Prolific.</p>
+    </div>
+  `;
+  show(message);
+  setTimeout(() => {
+    window.location.href = 'https://app.prolific.com';
+  }, 5000); // 5 second delay
+}
+
+function askYesNoQuestion(questionText) {
+  show(`
+    <div class="ui-container">
+      <h2>Question</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem;">${questionText}</p>
+      <div class="button-bar">
+        <button id="yes-btn">Yes</button>
+        <button id="no-btn">No</button>
+      </div>
+    </div>
+  `);
+  return new Promise(resolve => {
+    document.getElementById('yes-btn').onclick = () => resolve(true);
+    document.getElementById('no-btn').onclick = () => resolve(false);
+  });
+}
+
+async function runScreeningSequence() {
+  const questions = [
+    'Are you over 18 years of age?',
+    'Do you consent to participate in the study?'
+  ];
+
+  for (const question of questions) {
+    const answeredYes = await askYesNoQuestion(question);
+    if (!answeredYes) {
+      exitToProlific();
+      // Return a promise that never resolves to halt execution
+      return new Promise(() => {}); 
+    }
+  }
+}
 
 // ------------------- STIMULUS & TRIAL LIST PREPARATION -------------------
 async function loadAndPrepareStimuli() {
@@ -754,6 +910,8 @@ function finishExperiment() {
         };
     });
 
+    await showPIS();
+    await runScreeningSequence();
     await showWelcomeAndConsent();
     await runPreSurvey();
 
